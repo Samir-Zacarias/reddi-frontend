@@ -27,7 +27,7 @@ export default function RootHeader() {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white text-sm">
-      <div className="flex justify-between p-4 border-b-2 border-mainBorder md:px-12 items-center">
+      <div className="flex justify-between p-4 md:px-12 items-center">
         <Link href="/">
           <Image src={logo} alt="logo" className="min-w-[100px]" />
         </Link>

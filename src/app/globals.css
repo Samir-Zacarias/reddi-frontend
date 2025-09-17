@@ -81,3 +81,14 @@ h2 {
   font-size: 1rem;
   font-weight: 500;
 }
+
+.scrollbar-hide {
+  /* Firefox */
+  scrollbar-width: none;
+  /* IE and Edge */
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  /* Chrome, Safari, and Opera */
+  display: none;
+}
