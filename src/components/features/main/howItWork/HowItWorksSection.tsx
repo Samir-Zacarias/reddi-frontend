@@ -33,8 +33,8 @@ const HowItWorksSection: React.FC = () => {
     <section className="bg-gray-50 py-4 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto text-center">
         {/* Título y Subtítulo de la sección */}
-        <h2 className="text-3xl font-extrabold text-gray-900">Cómo funciona</h2>
-        <p className="mt-4 text-lg text-gray-600">
+        <h2 className="text-3xl font-semibold text-gray-900">Cómo funciona</h2>
+        <p className="mt-4 text-lg font-roboto text-gray-600">
           Tres simples pasos para recibir todo lo que necesitas
         </p>
       </div>

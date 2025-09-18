@@ -14,7 +14,7 @@ const BenefitItem: React.FC<BenefitItemProps> = ({ title, description }) => {
       {/* Círculo del icono */}
       <div
         className="
-          flex h-12 w-7 flex-shrink-0 items-center 
+          flex h-12 w-9 flex-shrink-0 items-center 
           justify-center rounded-full bg-primary
         "
       >
@@ -23,7 +23,7 @@ const BenefitItem: React.FC<BenefitItemProps> = ({ title, description }) => {
 
       {/* Contenido de texto */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        <h3 className="text-lg font-medium text-gray-900">{title}</h3>
         <p className="mt-1 text-base text-gray-600">{description}</p>
       </div>
     </div>

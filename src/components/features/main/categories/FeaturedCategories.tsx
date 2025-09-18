@@ -8,27 +8,27 @@ import CategoryCard from "./CategoryCard";
 const categories = [
   {
     name: "Restaurantes",
-    imageUrl: "/burger.png", // Ruta de ejemplo
+    imageUrl: "/burger.svg", // Ruta de ejemplo
     href: "/categorias/restaurantes",
   },
   {
     name: "Mercado",
-    imageUrl: "/uber_grocery.png", // Ruta de ejemplo
+    imageUrl: "/uber_grocer.svg", // Ruta de ejemplo
     href: "/categorias/mercado",
   },
   {
     name: "Alcohol",
-    imageUrl: "/alcohol.png", // Ruta de ejemplo
+    imageUrl: "/alcohol.svg", // Ruta de ejemplo
     href: "/categorias/alcohol",
   },
   {
     name: "Farmacia",
-    imageUrl: "/Pharma.png", // Ruta de ejemplo
+    imageUrl: "/Pharma.svg", // Ruta de ejemplo
     href: "/categorias/farmacia",
   },
   {
     name: "Tabaco",
-    imageUrl: "/Tobacco.png", // Ruta de ejemplo
+    imageUrl: "/Tobacco.svg", // Ruta de ejemplo
     href: "/categorias/tabaco",
   },
 ];

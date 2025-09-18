@@ -28,12 +28,12 @@ const benefitsData = [
 
 const BenefitsSection: React.FC = () => {
   return (
-    <section className="bg-white py-16 sm:py-20">
+    <section className="bg-white py-8 sm:py-20">
       <div className="mx-auto max-w-3xl px-6 lg:px-8">
         {/* Título de la sección */}
         <div className="text-start">
-          <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-            Beneficios de <span className="text-teal-500">Reddi</span>
+          <h2 className="text-3xl font-semibold text-gray-900 sm:text-4xl">
+            Beneficios de <span className="text-primary">Reddi</span>
           </h2>
         </div>
 

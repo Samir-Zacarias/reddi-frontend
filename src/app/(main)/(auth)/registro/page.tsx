@@ -4,7 +4,7 @@ import googleLogo from "@/src/assets/images/googleLogo.png";
 import AppleIcon from "@/src/components/icons/AppleIcon";
 import PhoneIcon from "@/src/components/icons/PhoneIcon";
 import SessionButton from "@/src/components/basics/LinkButton";
-import FormTitle from "@/src/components/features/user/FormTitle";
+import FormTitle from "@/src/components/features/auth/FormTitle";
 
 export default function Registro() {
   const sessionsButtonData = [

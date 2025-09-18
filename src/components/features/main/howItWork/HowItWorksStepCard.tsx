@@ -14,13 +14,13 @@ const HowItWorksStepCard: React.FC<HowItWorksStepCardProps> = ({
     <div
       className="
         flex flex-col items-center gap-3 rounded-2xl
-        bg-white p-6 text-center shadow-lg
+        bg-white p-2 text-center shadow-lg border border-gray-200
       "
     >
       {/* Círculo del icono */}
       <div
         className="
-          flex h-14 w-14 items-center 
+          flex h-10 w-10 items-center 
           justify-center rounded-full
         "
       >
