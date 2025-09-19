@@ -2,7 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { PromoCardProps } from "@/src/lib/finalUser/type";
+
+export type PromoCardProps = {
+  title: string;
+  subtitle: string;
+  code: string;
+  buttonText: string;
+  imageUrl: string;
+  bgColor: string;
+  href: string;
+};
 
 export default function PromoCard({
   title,

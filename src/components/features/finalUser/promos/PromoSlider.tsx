@@ -1,5 +1,5 @@
 import PromoCard from "./PromoCard";
-import { PromoCardProps } from "@/src/lib/finalUser/type";
+import { PromoCardProps } from "./PromoCard";
 
 export default function PromoSlider({
   promotions,

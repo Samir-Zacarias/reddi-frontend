@@ -3,7 +3,14 @@
 
 import Link from "next/link";
 import React from "react";
-import { NavItemProps } from "@/src/lib/finalUser/type";
+import { LucideProps } from "lucide-react";
+
+export type NavItemProps = {
+  href: string;
+  label: string;
+  icon: React.ComponentType<LucideProps>;
+  isActive: boolean;
+};
 
 export default function NavItem({
   href,

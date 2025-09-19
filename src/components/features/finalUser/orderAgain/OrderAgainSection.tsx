@@ -1,5 +1,5 @@
 import SliderSection from "@/src/components/basics/itemsSlider/SliderSection";
-import { SliderCardProps } from "@/src/lib/basics/type";
+import { SliderCardProps } from "@/src/components/basics/itemsSlider/SliderItem";
 
 export default function OrderAgainSection({
   items,

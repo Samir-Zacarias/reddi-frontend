@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import RestaurantCard from "./SliderItem";
-import { SliderCardProps } from "@/src/lib/basics/type";
+import { SliderCardProps } from "@/src/components/basics/itemsSlider/SliderItem";
+import RestaurantCard from "@/src/components/basics/itemsSlider/SliderItem";
 
 export default function SliderSection({
   cards,

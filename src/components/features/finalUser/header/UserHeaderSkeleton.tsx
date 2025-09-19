@@ -10,31 +10,25 @@ export default function UserHeaderSkeleton() {
         h-[140px] /* ALTURA FIJA: Crucial para evitar que el contenido salte. Ajústala si es necesario. */
       "
     >
-      {/* Fondo: Similar al real pero sin el z-index problemático. */}
-      {/* 
-        Contenedor del Contenido: 
-        - `relative z-10` para estar por encima del fondo.
-        - `animate-pulse` para la animación de carga.
-      */}
       <div className="relative z-10 flex animate-pulse flex-col space-y-4 p-4">
         {/* --- Fila Superior: Simulación de Usuario y Acciones --- */}
         <div className="flex items-end justify-between">
           {/* Lado Izquierdo: Simulación de Información del Usuario */}
           <div className="space-y-1.5">
             {/* Simula el "userName" */}
-            <div className="bg-skeleton"></div>
+            <div className="bg-skeleton h-4 w-20 rounded-sm"></div>
             {/* Simula la "address" y el botón chevron */}
             <div className="flex items-center gap-2">
-              <div className="h-7 w-40 rounded bg-skeleton"></div>
-              <div className="h-5 w-5 rounded-full bg-skeleton"></div>
+              <div className="h-5 w-40 rounded bg-skeleton"></div>
+              <div className="h-6 w-6 rounded-full bg-skeleton"></div>
             </div>
           </div>
 
           {/* Lado Derecho: Simulación de Iconos de Acción */}
           <div className="flex items-center space-x-4">
             {/* Simula los dos botones de icono (Bell y Cart) */}
-            <div className="h-8 w-8 rounded-full bg-skeleton"></div>
-            <div className="h-8 w-8 rounded-full bg-skeleton"></div>
+            <div className="h-6 w-6 rounded-full bg-skeleton"></div>
+            <div className="h-6 w-6 rounded-full bg-skeleton"></div>
           </div>
         </div>
 

@@ -1,9 +1,11 @@
-import { SliderCardProps } from "@/src/lib/basics/type";
+import { SliderCardProps } from "@/src/components/basics/itemsSlider/SliderItem";
 import { HeaderData } from "@/src/lib/finalUser/type";
-import { PromoCardProps } from "@/src/lib/finalUser/type";
+import { PromoCardProps } from "@/src/components/features/finalUser/promos/PromoCard";
 
 // Utilidad para el tiempo de respuesta de la API
 import { getRandomNumberFrom1To10 } from "@/src/lib/utils";
+
+const apiDelay = 500;
 
 // UserHeaderServer.tsx
 // HeaderData
@@ -11,11 +13,22 @@ export async function getHeaderData(): Promise<HeaderData> {
   console.log("Fetching user data on the server...");
   // Simulación de llamada API
   await new Promise((resolve) =>
-    setTimeout(resolve, 500 * getRandomNumberFrom1To10())
+    setTimeout(resolve, apiDelay * getRandomNumberFrom1To10())
   );
   const data: HeaderData = {
     userName: "Pepito Núñez",
-    address: "Cra. 123 #32-21",
+    address: [
+      {
+        id: 1,
+        address: "Muelle 03, 93",
+        label: "Yate",
+      },
+      {
+        id: 2,
+        address: "Muelle 03, 93",
+        label: "Villa",
+      },
+    ],
     notificationCount: 8,
     carCount: 2,
   };
@@ -28,7 +41,7 @@ export async function getOrderAgainData(): Promise<SliderCardProps[]> {
   console.log("Fetching user data on the server...");
   // Simulación de llamada API
   await new Promise((resolve) =>
-    setTimeout(resolve, 500 * getRandomNumberFrom1To10())
+    setTimeout(resolve, apiDelay * getRandomNumberFrom1To10())
   );
   const data: SliderCardProps[] = [
     {
@@ -59,7 +72,7 @@ export async function getPromosData(): Promise<PromoCardProps[]> {
   console.log("Fetching user data on the server...");
   // Simulación de llamada API
   await new Promise((resolve) =>
-    setTimeout(resolve, 500 * getRandomNumberFrom1To10())
+    setTimeout(resolve, apiDelay * getRandomNumberFrom1To10())
   );
   const data = [
     {
