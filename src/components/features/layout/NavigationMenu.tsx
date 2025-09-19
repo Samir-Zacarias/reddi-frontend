@@ -7,6 +7,7 @@ interface NavigationMenuProps {
   className?: string;
 }
 
+// El myOnClick cierra el menú al hacer click en un enlace solamente
 export default function NavigationMenu({
   myOnClick,
   isOpen,

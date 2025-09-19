@@ -23,7 +23,7 @@ export default function LargeCategoryGrid() {
             name={category.name}
             imageUrl={category.imageUrl}
             href={category.href}
-            size="large" // <-- ¡Aquí está la magia! Le decimos que use el tamaño grande
+            size="large"
           />
         ))}
       </div>

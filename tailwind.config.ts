@@ -26,6 +26,7 @@ export default {
         background: "hsl(var(--background))", //??
         loginBg: "hsl(var(--login-bg))",
         main: "hsl(var(--main))",
+        skeleton: "hsla(var(--skeleton))",
 
         foreground: "hsl(var(--foreground))",
         card: {

@@ -1,17 +1,16 @@
-import RootHeader from "@/src/components/features/layout/RootHeader";
-import RootFooter from "@/src/components/features/layout/RootFooter";
+import GuestHeader from "@/src/components/features/main/GuestHeader";
+import RootFooter from "@/src/components/features/layout/GuestFooter";
+//import SearchBar from "@/src/components/features/main/SearchBar";
 
-export default function UserLayout({
+export default function GuestLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <>
-      <RootHeader />
-      <div className="mt-[4.5rem] flex flex-col items-center md:flex-row-reverse md:p-6 grow">
-        {children}
-      </div>
+      <GuestHeader />
+      {children}
       <RootFooter />
     </>
   );

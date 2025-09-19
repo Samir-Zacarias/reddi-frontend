@@ -2,15 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import type { LucideProps } from "lucide-react";
 import React from "react";
-
-type NavItemProps = {
-  href: string;
-  label: string;
-  icon: React.ComponentType<LucideProps>;
-  isActive: boolean;
-};
+import { NavItemProps } from "@/src/lib/finalUser/type";
 
 export default function NavItem({
   href,

@@ -2,9 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import RestaurantCard, { SliderCardProps } from "./SliderItem";
-
-// Datos de ejemplo. En una aplicación real, esto vendría de una API.
+import RestaurantCard from "./SliderItem";
+import { SliderCardProps } from "@/src/lib/basics/type";
 
 export default function SliderSection({
   cards,

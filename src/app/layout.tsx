@@ -32,8 +32,6 @@ export default function RootLayout({
       className={`${poppins.variable} ${roboto.variable} ${inter.variable}`}
     >
       <body className="flex flex-col min-h-screen font-poppins">
-        {/* Layout UI */}
-        {/* Place children where you want to render a page or nested layout */}
         {children}
       </body>
     </html>

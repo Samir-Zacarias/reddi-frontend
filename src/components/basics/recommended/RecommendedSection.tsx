@@ -1,5 +1,5 @@
 import SliderSection from "@/src/components/basics/itemsSlider/SliderSection";
-import { SliderCardProps } from "@/src/components/basics/itemsSlider/SliderItem";
+import { SliderCardProps } from "@/src/lib/basics/type";
 
 const recommendedItems: SliderCardProps[] = [
   {

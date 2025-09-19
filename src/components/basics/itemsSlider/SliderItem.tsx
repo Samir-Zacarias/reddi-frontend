@@ -4,17 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Star } from "lucide-react"; // Importamos el icono de estrella
-
-// Definimos el tipo de datos que espera la tarjeta
-export type SliderCardProps = {
-  name: string;
-  imageUrl: string;
-  rating: number;
-  reviewCount: number;
-  deliveryTime: string;
-  deliveryFee: string;
-  href: string;
-};
+import { SliderCardProps } from "@/src/lib/basics/type";
 
 const SliderCard: React.FC<SliderCardProps> = ({
   name,
