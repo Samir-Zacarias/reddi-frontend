@@ -94,7 +94,7 @@ export default function GuestHeader() {
           <div className="flex items-center space-x-4">
             <button className="relative">
               <UserCarIcon fill="#000000" />
-              <Badge count={1} color={badgeColor} />
+              <Badge count={1} color={badgeColor} className="rounded-full" />
             </button>
             <BurgerButton isOpen={isMenuOpen} onClick={toggleMenu} />
           </div>

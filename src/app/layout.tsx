@@ -1,6 +1,6 @@
 import "./globals.css";
 // Importanción de fuentes
-import { Poppins, Roboto, Inter } from "next/font/google";
+import { Poppins, Roboto, Inter, Manrope } from "next/font/google";
 
 // Weights: 400 = normal, 500 = medium, 700 = bold, 900 = black
 const poppins = Poppins({
@@ -21,6 +21,12 @@ const inter = Inter({
   variable: "--font-roboto",
 });
 
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-manrope",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -29,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${poppins.variable} ${roboto.variable} ${inter.variable}`}
+      className={`${poppins.variable} ${roboto.variable} ${inter.variable} ${manrope.variable}`}
     >
       <body className="flex flex-col min-h-screen font-poppins">
         {children}

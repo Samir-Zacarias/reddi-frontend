@@ -117,12 +117,20 @@ export default function Header({ userData }: { userData: HeaderData }) {
             {/* Lado Derecho: Iconos de Acción */}
             <div className="flex items-center space-x-4">
               <button className="relative">
-                <BellIcon />
-                <Badge count={userData.notificationCount} color={badgeColor} />
+                <BellIcon fill="white" />
+                <Badge
+                  count={userData.notificationCount}
+                  color={badgeColor}
+                  className="rounded-full"
+                />
               </button>
               <button className="relative">
                 <UserCarIcon />
-                <Badge count={userData.carCount} color={badgeColor} />
+                <Badge
+                  count={userData.carCount}
+                  color={badgeColor}
+                  className="rounded-full"
+                />
               </button>
             </div>
           </div>

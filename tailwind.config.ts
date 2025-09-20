@@ -15,6 +15,7 @@ export default {
         roboto: ["var(--font-roboto)"],
         poppins: ["var(--font-poppins)"],
         inter: ["var(--font-inter)"],
+        manrope: ["var(--font-manrope)"],
       },
       colors: {
         primary: {

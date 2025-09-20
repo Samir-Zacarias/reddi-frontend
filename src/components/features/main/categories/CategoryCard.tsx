@@ -1,40 +1,32 @@
-// components/CategoryCard.tsx (Versión Modificada)
-
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-// 1. Añadimos la prop `size` que puede ser 'small' o 'large'
 type CategoryCardProps = {
   name: string;
   imageUrl: string;
   href: string;
-  size?: "small" | "large"; // Hacemos que sea opcional, con 'small' por defecto
+  size?: "small" | "large";
 };
 
 const CategoryCard: React.FC<CategoryCardProps> = ({
   name,
   imageUrl,
   href,
-  size = "small", // 2. Asignamos 'small' como valor por defecto
+  size = "small",
 }) => {
-  // 3. Definimos los estilos que cambian según el tamaño
   const isLarge = size === "large";
 
   // Clases dinámicas
   const containerClasses = isLarge
-    ? "w-full p-4 justify-between" // Más grande, con padding y espacio entre elementos
-    : "w-24 flex-shrink-0 gap-2 justify-start"; // El estilo original para el slider
+    ? "w-full p-4 justify-between"
+    : "w-24 flex-shrink-0 gap-2 justify-start";
 
-  const imageContainerClasses = isLarge
-    ? "w-full h-24" // Contenedor de imagen más alto
-    : "h-16 w-16"; // El original
+  const imageContainerClasses = isLarge ? "w-full h-24" : "h-16 w-16";
 
-  const imageSize = isLarge ? 96 : 64; // Tamaño de la imagen en píxeles (96px vs 64px)
+  const imageSize = isLarge ? 96 : 64;
 
-  const textSize = isLarge
-    ? "text-base font-bold" // Texto más grande y en negrita
-    : "text-sm font-medium"; // El original
+  const textSize = isLarge ? "text-base font-bold" : "text-sm font-medium";
 
   return (
     <Link

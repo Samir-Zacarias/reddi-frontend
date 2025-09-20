@@ -24,18 +24,20 @@ export default function AddressSlider({
 }: AddressSliderProps) {
   useBodyScrollLock(isOpen);
 
-  const [addingAddress, setAddingAddress] = useState(false);
+  const [isAddingAddress, setIsAddingAddress] = useState(false);
 
   const handleNewAddress = () => {
-    setAddingAddress(!addingAddress);
+    setIsAddingAddress(!isAddingAddress);
   };
+
+  // Debo hacer un componente AddressSections
 
   return (
     <Portal>
       {/* 2. El Panel Deslizante */}
       <div
         className={`
-          fixed top-0 left-0 h-full w-full max-w-md
+          fixed top-0 left-0 h-full w-full
           bg-white shadow-xl z-50
           flex flex-col
           transform transition-transform duration-300 ease-in-out
@@ -46,35 +48,27 @@ export default function AddressSlider({
         aria-labelledby="address-panel-title"
       >
         {/* Encabezado */}
-        <header className="flex items-center p-4 border-gray-200 flex-shrink-0">
-          <button
-            onClick={addingAddress ? handleNewAddress : onClose}
-            className="p-1 rounded-full hover:bg-black/20"
-          >
-            <ArrowIcon />
-          </button>
-          <h2
-            id="address-panel-title"
-            className="text-xl font-bold px-4 w-full"
-          >
-            Direcciones
-          </h2>
-        </header>
-
-        {addingAddress ? (
-          <NewAddressForm
-            onCancel={() => {
-              console.log("Cancelado");
-            }}
-            onSave={() => {
-              console.log("Guardado");
-            }}
-          />
+        {isAddingAddress ? (
+          <NewAddressForm onCancel={handleNewAddress} />
         ) : (
           <>
+            <header className="flex items-center p-4 border-gray-200 flex-shrink-0">
+              <button
+                onClick={onClose}
+                className="p-1 rounded-full hover:bg-black/20"
+              >
+                <ArrowIcon />
+              </button>
+              <h2
+                id="address-panel-title"
+                className="text-xl font-bold px-4 w-full"
+              >
+                Direcciones
+              </h2>
+            </header>
             <main className="flex-grow p-4 overflow-y-auto">
               <h3 className="text-base font-bold mb-4">
-                {addingAddress ? "Nueva dirección" : "Direcciones guardadas"}
+                {isAddingAddress ? "Nueva dirección" : "Direcciones guardadas"}
               </h3>
               <div className="space-y-4">
                 {data.map((item) => (
@@ -95,7 +89,7 @@ export default function AddressSlider({
               <button
                 className="
               w-full bg-primary text-white font-medium py-3
-              rounded-full text-center
+              rounded-2xl text-center
               hover:bg-[#15803d] transition-colors
             "
                 onClick={handleNewAddress}

@@ -19,11 +19,11 @@ export default function BellIcon({ className, fill }: IconProps) {
     >
       <path
         d="M8 3.5C10.7614 3.5 13 5.73858 13 8.5V10.7396C13 11.2294 13.1798 11.7022 13.5052 12.0683L14.7808 13.5035C15.6407 14.4708 14.954 16 13.6597 16H2.34025C1.04598 16 0.35927 14.4708 1.21913 13.5035L2.4948 12.0683C2.82022 11.7022 2.99998 11.2294 2.99998 10.7396L3 8.5C3 5.73858 5.23858 3.5 8 3.5ZM8 3.5V1M6.99994 19H8.99994"
-        stroke="white"
+        stroke={fill || "none"}
         strokeWidth="1.4"
         strokeLinecap="round"
         strokeLinejoin="round"
-        fill={fill || "none"}
+        fill="none"
       />
     </svg>
   );
