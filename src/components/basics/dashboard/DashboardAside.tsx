@@ -1,37 +1,22 @@
 "use client";
 
-import Squares2X2Icon from "@/src/components/icons/Squares2X2Icon";
 import LogoutAsideIcon from "@/src/components/icons/LogoutAsideIcon";
-import CollapsibleNavLink from "./CollapsibleNavLink";
-import SingleNavLink from "./SingleNavLink";
+import CollapsibleNavLink from "../../features/admin/CollapsibleNavLink";
+import SingleNavLink from "../../features/admin/SingleNavLink";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 export type NavLink = {
   name: string;
   href: string;
-  icon: React.ElementType;
-  subLinks?: Omit<NavLink, "icon" | "subLinks">[];
+  subLinks?: Omit<NavLink, "subLinks">[];
 };
 
-const navigationLinks: NavLink[] = [
-  { name: "Dashboard", href: "/admin/dashboard", icon: Squares2X2Icon },
-  { name: "Pedidos", href: "/admin/orders", icon: Squares2X2Icon },
-  {
-    name: "Usuarios",
-    href: "#",
-    icon: Squares2X2Icon,
-    subLinks: [
-      { name: "Clientes", href: "/admin/clients" },
-      { name: "Aliados", href: "/admin/partners" },
-      { name: "Repartidores", href: "/admin/drivers" },
-    ],
-  },
-  { name: "Banner", href: "/admin/banners", icon: Squares2X2Icon },
-  { name: "Finanzas", href: "/admin/finances", icon: Squares2X2Icon },
-];
-
-export default function Sidebar() {
+export default function Sidebar({
+  navigationLinks,
+}: {
+  navigationLinks: NavLink[];
+}) {
   const pathname = usePathname();
   const [openMenu, setOpenMenu] = useState(() => {
     const currentLink = navigationLinks.find((link) =>

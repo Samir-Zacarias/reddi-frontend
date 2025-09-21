@@ -1,9 +1,9 @@
-import AdminAside, {
+import PartnerAside, {
   NavLink,
 } from "@/src/components/basics/dashboard/DashboardAside";
-import AdminHeader from "@/src/components/basics/dashboard/DashboardHeader";
+import PartnerHeader from "@/src/components/basics/dashboard/DashboardHeader";
 
-const actualURL = "/admin";
+const actualURL = "/aliado";
 
 const navigationLinks: NavLink[] = [
   {
@@ -12,11 +12,12 @@ const navigationLinks: NavLink[] = [
   },
   {
     name: "Pedidos",
-    href: `${actualURL}/orders`,
+    href: `${actualURL}/pedidos`,
   },
   {
     name: "Usuarios",
     href: "#",
+
     subLinks: [
       { name: "Clientes", href: `${actualURL}/clientes` },
       { name: "Aliados", href: `${actualURL}/aliados` },
@@ -33,15 +34,15 @@ const navigationLinks: NavLink[] = [
   },
 ];
 
-export default function AdminDashboardLayout({
+export default function PartnerDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <>
-      <AdminAside navigationLinks={navigationLinks} />
-      <AdminHeader />
+      <PartnerAside navigationLinks={navigationLinks} />
+      <PartnerHeader />
       <main className="md:ml-[14rem] mt-[86px] bg-[#F0F2F5B8]">{children}</main>
     </>
   );

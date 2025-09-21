@@ -1,6 +1,7 @@
-import { NavLink } from "./AdminAside";
+import { NavLink } from "../../basics/dashboard/DashboardAside";
 import Link from "next/link";
 import ChevronIcon from "@/src/components/icons/ChevronIcon";
+import Squares2X2Icon from "@/src/components/icons/Squares2X2Icon";
 
 type CollapsibleNavLinkProps = {
   link: NavLink;
@@ -26,7 +27,7 @@ export default function CollapsibleNavLink({
         }`}
       >
         <div className="flex items-center space-x-3">
-          <link.icon className="h-5 w-5" />
+          <Squares2X2Icon className="h-5 w-5" />
           <span>{link.name}</span>
         </div>
         <ChevronIcon

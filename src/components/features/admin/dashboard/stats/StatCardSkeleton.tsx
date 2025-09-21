@@ -1,7 +1,7 @@
 // src/components/ui/StatCard.tsx
 import React from "react";
 
-export default function StatCard() {
+export default function StatCardSkeleton() {
   return (
     // Contenedor principal de la tarjeta
     <div

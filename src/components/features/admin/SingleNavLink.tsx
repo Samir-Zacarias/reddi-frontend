@@ -1,6 +1,7 @@
 import SingleNavLinkProps from "./SingleNavLink";
-import { NavLink } from "./AdminAside";
+import { NavLink } from "../../basics/dashboard/DashboardAside";
 import Link from "next/link";
+import Squares2X2Icon from "@/src/components/icons/Squares2X2Icon";
 
 export type SingleNavLinkProps = {
   link: Omit<NavLink, "subLinks">;
@@ -23,7 +24,7 @@ export default function SingleNavLink({
           : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
       }`}
     >
-      <link.icon className="h-5 w-5" />
+      <Squares2X2Icon className="h-5 w-5" />
       <span>{link.name}</span>
     </Link>
   );
