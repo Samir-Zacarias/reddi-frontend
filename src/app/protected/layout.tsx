@@ -2,7 +2,6 @@ import { DeployButton } from "@/src/components/deploy-button";
 import { EnvVarWarning } from "@/src/components/env-var-warning";
 import { AuthButton } from "@/src/components/auth-button";
 import { ThemeSwitcher } from "@/src/components/theme-switcher";
-import { hasEnvVars } from "@/src/lib/utils";
 import Link from "next/link";
 
 export default function ProtectedLayout({
@@ -21,7 +20,6 @@ export default function ProtectedLayout({
                 <DeployButton />
               </div>
             </div>
-            {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
           </div>
         </nav>
         <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
