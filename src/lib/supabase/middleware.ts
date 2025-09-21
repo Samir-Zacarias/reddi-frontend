@@ -12,6 +12,9 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
+  // Lista de rutas que son públicas y no requieren autenticación
+  const authPaths = ["/login", "/admin/login"];
+
   // With Fluid compute, don't put this client in a global environment
   // variable. Always create a new one on each request.
   const anonKey =
@@ -108,17 +111,16 @@ export async function updateSession(request: NextRequest) {
   const search = request.nextUrl.search;
 
   // Redirect authenticated users away from auth pages to their role home
-  const isAuthPage =
-    path === "/login" || path === "/auth/login" || path.startsWith("/auth/");
-  console.log("[mw] flags", { isAuthPage, path, search });
+  const isAuthPage = authPaths.includes(path) || path.startsWith("/auth/");
+  console.log("[mw] flags (isAuthPage check)", { isAuthPage, path, search });
   if (isAuthed && isAuthPage) {
     const url = request.nextUrl.clone();
     const home =
       role === "admin"
         ? "/admin/dashboard"
-        : role === "aliado"
+        : role === "market"
         ? "/aliado/dashboard"
-        : role === "repartidor"
+        : role === "delivery"
         ? "/repartidor/home"
         : "/user/home";
     url.pathname = home;
@@ -126,6 +128,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // --- CORRECCIÓN PRINCIPAL AQUÍ ---
   // Unauthenticated access control: block protected areas
   const isProtected =
     path.startsWith("/protected") ||
@@ -133,41 +136,68 @@ export async function updateSession(request: NextRequest) {
     path.startsWith("/aliado") ||
     path.startsWith("/repartidor") ||
     path.startsWith("/user");
-  console.log("[mw] flags", { isProtected, path });
-  if (!isAuthed && isProtected) {
+
+  // Protegerá las rutas si NO estás autenticado, son protegidas Y NO están en la lista pública.
+  if (!isAuthed && isProtected && !authPaths.includes(path)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", path);
-    console.log("[mw] anon -> /login", { from: path });
+    console.log("[mw] redirect: anon on protected route -> /login", {
+      from: path,
+    });
     return NextResponse.redirect(url);
   }
+  // --- FIN DE LA CORRECCIÓN ---
 
   // Role-based gates for sections
   if (isAuthed) {
     const deny = (reason: string) => {
       const url = request.nextUrl.clone();
-      // Send user to their own home if role mismatch
+      // NOTA: Asegúrate que los roles aquí coincidan con los de abajo.
+      // Aquí usas 'market' y 'delivery', así que los usaré en las validaciones.
       const home =
         role === "admin"
           ? "/admin/dashboard"
-          : role === "aliado"
+          : role === "market"
           ? "/aliado/dashboard"
-          : role === "repartidor"
+          : role === "delivery"
           ? "/repartidor/home"
-          : "/user/home";
+          : "/user/home"; // Asumimos una ruta por defecto para otros roles autenticados
       url.pathname = home;
-      console.log("[mw] role deny:", { reason, role, path, to: home });
+      console.log("[mw] role deny:", { reason, role, path, redirectTo: home });
       return NextResponse.redirect(url);
     };
 
-    if (path.startsWith("/admin") && role !== "admin") {
-      return deny("admin only");
+    // --- LÓGICA CORREGIDA Y MEJORADA ---
+
+    // El usuario está en la sección /admin
+    if (path.startsWith("/admin")) {
+      if (role !== "admin") {
+        return deny("admin area requires 'admin' role");
+      }
     }
-    if (path.startsWith("/aliado") && role !== "aliado") {
-      return deny("aliado only");
+    // El usuario está en la sección /aliado
+    else if (path.startsWith("/aliado")) {
+      // Usamos 'market' como en tu lógica de redirección
+      if (role !== "market") {
+        return deny("aliado area requires 'market' role");
+      }
     }
-    if (path.startsWith("/repartidor") && role !== "repartidor") {
-      return deny("repartidor only");
+    // El usuario está en la sección /repartidor
+    else if (path.startsWith("/repartidor")) {
+      // Usamos 'delivery' como en tu lógica de redirección
+      if (role !== "delivery") {
+        return deny("repartidor area requires 'delivery' role");
+      }
+    }
+    // El usuario está en la sección /user (genérica)
+    else if (path.startsWith("/user")) {
+      // Un admin o cualquier otro rol especial no debería estar aquí.
+      // Permitimos solo a usuarios sin un rol específico (o con un rol 'user')
+      const allowedUserRoles = ["user", null, undefined]; // Ajusta si tienes un rol explícito 'user'
+      if (!allowedUserRoles.includes(role as any)) {
+        return deny("special roles cannot access general user area");
+      }
     }
   }
 

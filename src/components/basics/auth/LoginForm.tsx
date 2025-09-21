@@ -26,6 +26,42 @@ export default function LoginForm({
   const searchParams = useSearchParams();
   const hasRedirectedRef = useRef(false);
 
+  // Helpers: derive role and home path
+  const homeForRole = (role?: string | null) => {
+    switch ((role || "").toLowerCase()) {
+      case "admin":
+        return "/admin/dashboard";
+      case "market":
+        return "/aliado/dashboard";
+      case "delivery":
+        return "/repartidor/home";
+      default:
+        return "/user/home";
+    }
+  };
+
+  const resolveRole = async (supabase: ReturnType<typeof createClient>) => {
+    const { data: sessionRes } = await supabase.auth.getSession();
+    const user = sessionRes.session?.user;
+    if (!user) return null;
+    try {
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role, user_role")
+        .eq("id", user.id)
+        .single();
+      if (!profileError) {
+        const pr = (profile as any) || {};
+        return pr.role || pr.user_role || null;
+      }
+    } catch (e) {
+      // ignore and fallback
+    }
+    const am = (user.app_metadata as any) || {};
+    const um = (user.user_metadata as any) || {};
+    return am.user_role || am.role || um.user_role || um.role || null;
+  };
+
   // Redirección si ya hay sesión activa (p. ej., al volver de OAuth)
   useEffect(() => {
     const supabase = createClient();
@@ -33,17 +69,24 @@ export default function LoginForm({
     (async () => {
       const { data } = await supabase.auth.getSession();
       if (mounted && data.session && !hasRedirectedRef.current) {
-        const next = searchParams.get("next") || "/user/home";
+        const next = searchParams.get("next");
+        let to = next || homeForRole(await resolveRole(supabase));
         hasRedirectedRef.current = true;
-        router.replace(next);
+        router.replace(to);
       }
     })();
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         if (session && !hasRedirectedRef.current) {
-          const next = searchParams.get("next") || "/user/home";
-          hasRedirectedRef.current = true;
-          router.replace(next);
+          const handle = async () => {
+            const next = searchParams.get("next");
+            const role = await resolveRole(supabase);
+            const to = next || homeForRole(role);
+            hasRedirectedRef.current = true;
+            router.replace(to);
+          };
+          // run and ignore promise
+          handle();
         }
       }
     );
@@ -65,10 +108,11 @@ export default function LoginForm({
         password,
       });
       if (error) throw error;
-      const next = searchParams.get("next") || "/user/home";
-      // Recordarme: extiende la persistencia (handled by Supabase via persistence option, default is local)
-      // If we needed to switch persistence, we'd recreate the client with different storage.
-      router.replace(next);
+      const next = searchParams.get("next");
+      const role = await resolveRole(supabase);
+      const to = next || homeForRole(role);
+      // Recordarme: Supabase por defecto usa localStorage; si quieres sessionStorage podemos ajustarlo.
+      router.replace(to);
     } catch (err: unknown) {
       setError(
         err instanceof Error

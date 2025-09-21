@@ -23,8 +23,8 @@ export default function PasswordInput({
   passwordValue,
   displayPassword,
   myOnChange,
+  disabled = false,
 }: PasswordInputProps) {
-  const disabled = arguments[0]?.disabled;
   return (
     <div>
       <label

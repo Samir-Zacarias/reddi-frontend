@@ -7,29 +7,48 @@ export default async function DeliveryLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Server-side guard: only repartidor can access
-  const supabase = await createClient();
-  const { data: sessionData } = await supabase.auth.getSession();
-  const session = sessionData.session;
-  const user = session?.user;
-  const am = (user?.app_metadata as any) || {};
-  const um = (user?.user_metadata as any) || {};
-  const role: string | null =
-    am.user_role || am.role || um.user_role || um.role || null;
+  const supabase = await createClient(); // createClient ahora es una función síncrona en las últimas versiones
 
+  // --- CORRECCIÓN AQUÍ: USA getUser() ---
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect(`/login?next=${encodeURIComponent("/repartidor/home")}`);
+  }
+
+  // Ahora obtén el rol desde la base de datos para la máxima fiabilidad
+  // igual que en el middleware.
+  let role: string | null = null;
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  role = (profile as any)?.role || null;
+
+  // Opcional: Fallback a metadata si es necesario, pero la DB es la fuente de verdad.
+  if (!role) {
+    const am = (user.app_metadata as any) || {};
+    const um = (user.user_metadata as any) || {};
+    role = am.user_role || am.role || um.user_role || um.role || null;
+  }
+
+  // --- CONSISTENCIA DE ROLES ---
+  // Asegúrate de que los nombres de roles sean consistentes.
+  // En el middleware usas 'market', aquí usas 'aliado'. Usemos uno solo.
   const toHome = (r?: string | null) =>
     r === "admin"
       ? "/admin/dashboard"
-      : r === "aliado"
+      : r === "market" // Si usas 'market' en el middleware, úsalo aquí también
       ? "/aliado/dashboard"
-      : r === "repartidor"
+      : r === "delivery"
       ? "/repartidor/home"
       : "/user/home";
 
-  if (!session) {
-    redirect(`/login?next=${encodeURIComponent("/repartidor/home")}`);
-  }
-  if (role !== "repartidor") {
+  if (role !== "delivery") {
     redirect(toHome(role));
   }
 
