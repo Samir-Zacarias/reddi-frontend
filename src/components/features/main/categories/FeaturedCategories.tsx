@@ -33,16 +33,20 @@ const categories = [
   },
 ];
 
-const FeaturedCategories: React.FC = () => {
+const FeaturedCategories: React.FC = ({
+  className,
+}: {
+  className?: string;
+}) => {
   return (
-    <section className="w-full py-4" aria-labelledby="categorias-destacadas">
+    <section className={`${className}`} aria-labelledby="categorias-destacadas">
       {/* Título (Opcional pero recomendado para accesibilidad) */}
       {/* Contenedor con scroll horizontal */}
       <div
         className="
           flex w-full items-start gap-4 
-          overflow-x-auto pb-4 
-          px-4 sm:px-6 
+          overflow-x-auto 
+          sm:px-6 
           scrollbar-hide
         "
       >

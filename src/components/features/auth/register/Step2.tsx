@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import OtpInput from "@/src/components/features/auth/OtpInput";
+import OtpInput from "@/src/components/basics/auth/OtpInput";
 import BasicButton from "@/src/components/basics/BasicButton";
-import FormTitle from "@/src/components/features/auth/FormTitle";
+import FormTitle from "@/src/components/basics/auth/FormTitle";
 
 export default function Step2({
   onSubmit,

@@ -1,5 +1,3 @@
-// components/SearchBar.tsx
-
 import React from "react";
 import SearchIcon from "../../icons/SearchIcon";
 import FiltersIcon from "../../icons/FiltersIcon";
@@ -8,49 +6,53 @@ import FiltersIcon from "../../icons/FiltersIcon";
 type SearchBarProps = {
   placeholder?: string;
   onFilterClick?: () => void;
-  className?: string;
+  isVisible?: boolean;
 };
 
 const SearchBar: React.FC<SearchBarProps> = ({
   placeholder = "Busca 'Refresco'", // Placeholder por defecto como en la imagen
   onFilterClick,
-  className = "",
+  isVisible = true,
 }) => {
   return (
-    <div className={`relative flex w-full items-center ${className}`}>
-      {/* Contenedor del campo de búsqueda y los iconos */}
-      <div className="relative w-full">
-        {/* Icono de Lupa (Search) */}
+    <div
+      className={`
+                  flex items-center gap-3
+                  transition-all duration-500 ease-in-out
+                  ${
+                    isVisible
+                      ? "max-h-20 opacity-100 translate-y-0"
+                      : "max-h-0 opacity-0 -translate-y-full invisible"
+                  }
+                `}
+    >
+      {/* Barra de Búsqueda */}
+      <div className="relative flex-grow">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
           <SearchIcon />
         </div>
-
-        {/* Campo de texto (input) */}
         <input
-          type="text"
+          type="search"
           placeholder={placeholder}
           className="
-            w-full rounded-full border-none bg-gray-100 
-            py-3 pl-11 pr-12 text-gray-800 
-            placeholder:text-gray-500 
-            focus:outline-none focus:ring-2 focus:ring-teal-400
-          "
+                      w-full rounded-full border-none bg-white 
+                      py-3 pl-11 pr-4 
+                      text-gray-900 placeholder:text-gray-400
+                      focus:outline-none focus:ring-2 focus:ring-green-300
+                    "
         />
-
-        {/* Icono de Filtros (Sliders) */}
-        <button
-          type="button"
-          onClick={onFilterClick}
-          className="
-            absolute inset-y-0 right-0 flex items-center pr-4 
-            text-teal-500 transition-transform duration-200 
-            hover:scale-110 focus:outline-none
-          "
-          aria-label="Abrir filtros de búsqueda"
-        >
-          <FiltersIcon />
-        </button>
       </div>
+      {/* Botón de Filtros */}
+      <button
+        onClick={onFilterClick}
+        className="
+                    flex h-12 w-14 flex-shrink-0 
+                    items-center justify-center rounded-3xl 
+                    bg-white shadow-md
+                  "
+      >
+        <FiltersIcon />
+      </button>
     </div>
   );
 };

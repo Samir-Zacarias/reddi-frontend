@@ -1,4 +1,4 @@
-import { CardShell } from "@/src/components/features/admin/dashboard/mapcard/MapCard";
+import CardShell from "../../CardShell";
 import DangerIcon from "@/src/components/icons/DangerIcon";
 import WarningIcon from "@/src/components/icons/WarningIcon";
 import InfoIcon from "@/src/components/icons/InfoIcon";

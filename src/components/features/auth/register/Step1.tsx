@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import FormInput from "@/src/components/features/auth/FormInput";
+import FormInput from "@/src/components/basics/auth/FormInput";
 import PhoneIcon from "@/src/components/icons/PhoneIcon";
 import BasicButton from "@/src/components/basics/BasicButton";
-import FormTitle from "@/src/components/features/auth/FormTitle";
+import FormTitle from "@/src/components/basics/auth/FormTitle";
 
 export default function Step1({
   onSubmit,

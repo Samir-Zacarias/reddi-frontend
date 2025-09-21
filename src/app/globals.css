@@ -73,6 +73,22 @@
   }
 }
 
+@layer base {
+  /* Estilo base para todos los inputs, textareas y selects */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="search"],
+  textarea,
+  select {
+    /* Evitamos el outline por defecto del navegador */
+    @apply focus:outline-none;
+    /* ¡AQUÍ ESTÁ LA MAGIA! El estilo de focus-visible */
+    @apply focus-visible:ring-2 focus-visible:ring-[#3762E2] focus-visible:border-transparent;
+  }
+}
+
 h1 {
   font-size: 1.25rem;
   font-weight: 700;

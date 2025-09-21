@@ -4,17 +4,23 @@
 
 import Badge from "@/src/components/basics/header/Badge";
 import Logo from "@/src/components/basics/Logo";
-import FiltersIcon from "@/src/components/icons/FiltersIcon";
-import SearchIcon from "@/src/components/icons/SearchIcon";
 import UserCarIcon from "@/src/components/icons/UserCarIcon";
 import BurgerButton from "@/src/components/features/layout/BurgerButton";
 import GuestMenu from "@/src/components/features/main/GuestMenu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import SearchBar from "./SearchBar";
 
 const badgeColor = "bg-primary";
 const primary = "#00A86B";
+const menuLinksData = [
+  { label: "Delivery gratis", href: "/" },
+  { label: "Ofertas", href: "/" },
+  { label: "Desayuno", href: "/" },
+  { label: "Almuerzo", href: "/" },
+  { label: "Cena", href: "/" },
+];
 
 export default function GuestHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -101,57 +107,12 @@ export default function GuestHeader() {
         </div>
 
         {/* --- Fila Inferior: Búsqueda y Filtros --- */}
-        {showSearchBar && (
-          <div
-            className={`
-              flex items-center gap-3
-              transition-all duration-500 ease-in-out
-              ${
-                isSearchBarVisible
-                  ? "max-h-20 opacity-100 translate-y-0"
-                  : "max-h-0 opacity-0 -translate-y-full invisible"
-              }
-            `}
-          >
-            {/* Barra de Búsqueda */}
-            <div className="relative flex-grow">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                <SearchIcon />
-              </div>
-              <input
-                type="search"
-                placeholder="Busca 'Refresco'"
-                className="
-                  w-full rounded-full border-none bg-white 
-                  py-3 pl-11 pr-4 
-                  text-gray-900 placeholder:text-gray-400
-                  focus:outline-none focus:ring-2 focus:ring-green-300
-                "
-              />
-            </div>
-            {/* Botón de Filtros */}
-            <button
-              className="
-                flex h-12 w-14 flex-shrink-0 
-                items-center justify-center rounded-3xl 
-                bg-white shadow-md
-              "
-            >
-              <FiltersIcon />
-            </button>
-          </div>
-        )}
+        {showSearchBar && <SearchBar isVisible={isSearchBarVisible} />}
       </div>
       <GuestMenu
         isOpen={isMenuOpen}
         myOnClick={toggleMenu}
-        linksData={[
-          { label: "Delivery gratis", href: "/" },
-          { label: "Ofertas", href: "/" },
-          { label: "Desayuno", href: "/" },
-          { label: "Almuerzo", href: "/" },
-          { label: "Cena", href: "/" },
-        ]}
+        linksData={menuLinksData}
       />
     </header>
   );

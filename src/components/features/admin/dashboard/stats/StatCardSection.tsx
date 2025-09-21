@@ -12,25 +12,24 @@ type StatCardSectionProps = {
 };
 
 const icons = [
-  <StatCarIcon />,
-  <StatDollarIcon />,
-  <StatDeliveryIcon />,
-  <StatPartnersIcon />,
-  <StatUsersIcon />,
+  <StatCarIcon key={0} />,
+  <StatDollarIcon key={1} />,
+  <StatDeliveryIcon key={2} />,
+  <StatPartnersIcon key={3} />,
+  <StatUsersIcon key={4} />,
 ];
 
 export default function StatCardSection({ stats }: StatCardSectionProps) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 mb-4">
-      {stats.map((stat, index) => (
-        <StatCard
-          key={stat.title} // Es importante usar una key única. Si los títulos no se repiten, es una buena opción.
-          title={stat.title}
-          value={stat.value}
-        >
-          {icons[index]}
-        </StatCard>
-      ))}
+      {stats.map((stat, index) => {
+        const icon = icons[index];
+        return (
+          <StatCard key={stat.title} title={stat.title} value={stat.value}>
+            {icon}
+          </StatCard>
+        );
+      })}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { PromoCardProps } from "@/src/components/features/finalUser/promos/PromoCard";
+import { PromoCardProps } from "@/src/components/basics/promos/PromoCard";
 // Utilidad para el tiempo de respuesta de la API
 import { getRandomNumberFrom1To10 } from "@/src/lib/utils";
 

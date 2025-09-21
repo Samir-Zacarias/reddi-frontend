@@ -1,0 +1,7 @@
+import PromoSlider from "./PromoSlider";
+import getPromosData from "@/src/lib/finalUser/home/data/getPromosData";
+
+export default async function PromoSliderServer() {
+  const promotions = await getPromosData();
+  return <PromoSlider promotions={promotions} />;
+}

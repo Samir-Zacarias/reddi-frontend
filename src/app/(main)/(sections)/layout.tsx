@@ -1,3 +1,5 @@
+import GuestFooter from "@/src/components/features/layout/GuestFooter";
+
 export default function SectionsLayout({
   children,
 }: {
@@ -5,9 +7,8 @@ export default function SectionsLayout({
 }) {
   return (
     <>
-      <main className="mt-[4.5rem] flex flex-col items-center md:flex-row-reverse md:p-6 grow">
-        {children}
-      </main>
+      <main className="mt-[4.5rem] md:flex-row-reverse grow">{children}</main>
+      <GuestFooter />
     </>
   );
 }

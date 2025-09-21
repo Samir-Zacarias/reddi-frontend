@@ -64,7 +64,7 @@ export default function AddressEditForm({ onCancel }: NewAddressFormProps) {
               className="
             block w-full border border-gray-300 rounded-xl
             py-2 px-3 appearance-none
-            focus:border-primary focus:ring focus:ring-primary focus:outline-none
+            
           "
             >
               {/* Opciones*/}
@@ -93,7 +93,7 @@ export default function AddressEditForm({ onCancel }: NewAddressFormProps) {
             block w-full rounded-xl border-gray-300 shadow-sm
             border
             py-2 px-3 resize-none
-            focus:border-primary focus:ring focus:ring-primary focus:outline-none
+            
           "
               />
             </div>

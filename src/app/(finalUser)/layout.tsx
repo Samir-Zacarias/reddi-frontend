@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import UserHeaderServer from "@/src/components/features/finalUser/header/UserHeaderServer";
 import UserHeaderSkeleton from "@/src/components/features/finalUser/header/UserHeaderSkeleton";
-import UserFooter from "@/src/components/features/finalUser/UserFooter";
+import UserFooter from "@/src/components/basics/UserFooter";
 
 export default function UserLayout({
   children,

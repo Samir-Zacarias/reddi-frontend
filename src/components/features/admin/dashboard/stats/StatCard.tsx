@@ -14,7 +14,7 @@ export default function StatCard({
     // Contenedor principal de la tarjeta
     <div
       className="bg-white rounded-2xl p-4 shadow-sm flex items-center space-x-4
-                    hover:shadow-lg transition-shadow duration-300"
+                    hover:shadow-lg transition-shadow duration-300 justify-center md:justify-start"
     >
       {/* Círculo del Ícono */}
       <div className="rounded-full">{children}</div>

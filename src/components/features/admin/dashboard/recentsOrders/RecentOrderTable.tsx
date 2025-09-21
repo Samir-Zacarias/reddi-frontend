@@ -1,5 +1,4 @@
-// src/components/dashboard/RecentOrdersTable.tsx
-import { CardShell } from "@/src/components/features/admin/dashboard/mapcard/MapCard";
+import CardShell from "../../CardShell";
 
 const orders = [
   {

@@ -9,7 +9,7 @@ import ReddiLogo from "@/src/components/icons/ReddiLogo";
 
 export default function Header() {
   return (
-    <header className="fixed bg-white w-full font-manrope">
+    <header className="fixed bg-white w-full font-manrope z-50">
       <div className="flex items-center">
         {/* Logo */}
         <div className="py-6 px-14 w-[14rem]">
