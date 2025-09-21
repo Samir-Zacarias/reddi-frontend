@@ -12,6 +12,7 @@ interface PasswordInputProps {
   passwordValue: string;
   displayPassword: (show: boolean) => void;
   myOnChange: (password: string) => void;
+  disabled?: boolean;
 }
 
 export default function PasswordInput({
@@ -23,6 +24,7 @@ export default function PasswordInput({
   displayPassword,
   myOnChange,
 }: PasswordInputProps) {
+  const disabled = arguments[0]?.disabled;
   return (
     <div>
       <label
@@ -45,11 +47,13 @@ export default function PasswordInput({
           placeholder="Ingresa tu contraseña"
           className="w-full pl-10 pr-10 py-3 border border-gray-400 rounded-xl font-roboto"
           required
+          disabled={disabled}
         />
         <button
           type="button"
           onClick={() => displayPassword(!isPasswordDisplayed)}
           className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+          disabled={disabled}
         >
           {isPasswordDisplayed ? (
             <EyeLoginHIcon className="h-5 w-5 text-gray-400" />
