@@ -10,12 +10,12 @@ import SearchIcon from "@/src/components/icons/SearchIcon";
 import BellIcon from "@/src/components/icons/BellIcon";
 import UserCarIcon from "@/src/components/icons/UserCarIcon";
 import AddressSlider from "@/src/components/features/finalUser/adressSlider/AddressSlider";
-import { HeaderData } from "@/src/lib/finalUser/type";
+import { UserHeaderData } from "@/src/lib/finalUser/type";
 import { useState, useEffect } from "react";
 
 const badgeColor = "bg-red-500";
 
-export default function Header({ userData }: { userData: HeaderData }) {
+export default function Header({ userData }: { userData: UserHeaderData }) {
   const [lastScrollY, setLastScrollY] = useState(0); // Para saber si el usuario está scrolleando
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(true); // Para mostrar/ocultar la barra de búsqueda según el scroll
   const [isClient, setIsClient] = useState(false); //Para verificar si se renderizó en el cliente

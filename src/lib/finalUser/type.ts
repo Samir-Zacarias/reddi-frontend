@@ -1,6 +1,6 @@
 // Data types
 
-export type HeaderData = {
+export type UserHeaderData = {
   userName: string;
   address: AddressData[];
   notificationCount: number;

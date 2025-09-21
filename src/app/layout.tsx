@@ -18,7 +18,7 @@ const roboto = Roboto({
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "900"],
-  variable: "--font-roboto",
+  variable: "--font-inter",
 });
 
 const manrope = Manrope({

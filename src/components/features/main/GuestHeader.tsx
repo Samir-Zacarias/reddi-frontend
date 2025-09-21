@@ -89,9 +89,9 @@ export default function GuestHeader() {
       <div
         className={`flex flex-col p-4 ${isSearchBarVisible ? "space-y-4" : ""}`}
       >
-        {/* --- Fila Superior: Usuario y Acciones --- */}
+        {/* --- Fila Superior: Logo y Acciones --- */}
         <div className="flex items-end justify-between">
-          {/* Lado Izquierdo: Información del Usuario */}
+          {/* Lado Izquierdo: Logo */}
           <Link href="/">
             <Logo fill={primary} />
           </Link>

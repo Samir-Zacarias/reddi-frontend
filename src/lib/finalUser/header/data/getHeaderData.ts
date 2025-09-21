@@ -1,4 +1,4 @@
-import { HeaderData } from "@/src/lib/finalUser/type";
+import { UserHeaderData } from "@/src/lib/finalUser/type";
 
 // Utilidad para el tiempo de respuesta de la API
 import { getRandomNumberFrom1To10 } from "@/src/lib/utils";
@@ -6,13 +6,13 @@ import { getRandomNumberFrom1To10 } from "@/src/lib/utils";
 const apiDelay = 500;
 
 // HeaderData
-export default async function getHeaderData(): Promise<HeaderData> {
+export default async function getHeaderData(): Promise<UserHeaderData> {
   console.log("Fetching user data on the server...");
   // Simulación de llamada API
   await new Promise((resolve) =>
     setTimeout(resolve, apiDelay * getRandomNumberFrom1To10())
   );
-  const data: HeaderData = {
+  const data: UserHeaderData = {
     userName: "Pepito Núñez",
     address: [
       {
