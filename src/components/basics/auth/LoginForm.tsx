@@ -71,7 +71,9 @@ export default function LoginForm({
       router.replace(next);
     } catch (err: unknown) {
       setError(
-        err instanceof Error ? err.message : "Ocurrió un error al iniciar sesión"
+        err instanceof Error
+          ? err.message
+          : "Ocurrió un error al iniciar sesión"
       );
     } finally {
       setIsLoading(false);
