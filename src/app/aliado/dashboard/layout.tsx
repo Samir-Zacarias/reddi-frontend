@@ -3,16 +3,20 @@ import PartnerAside, {
 } from "@/src/components/basics/dashboard/DashboardAside";
 import PartnerHeader from "@/src/components/basics/dashboard/DashboardHeader";
 
-const actualURL = "/aliado";
+const actualURL = "/aliado/dashboard";
 
 const navigationLinks: NavLink[] = [
   {
     name: "Dashboard",
-    href: `${actualURL}/dashboard`,
+    href: `${actualURL}`,
   },
   {
-    name: "Pedidos",
-    href: `${actualURL}/pedidos`,
+    name: "Inventario",
+    href: `${actualURL}/productos`,
+    subLinks: [
+      { name: "Productos", href: `${actualURL}/productos` },
+      { name: "Menú", href: `${actualURL}/menu` },
+    ],
   },
   {
     name: "Usuarios",

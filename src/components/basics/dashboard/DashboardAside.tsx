@@ -20,7 +20,7 @@ export default function Sidebar({
   const pathname = usePathname();
   const [openMenu, setOpenMenu] = useState(() => {
     const currentLink = navigationLinks.find((link) =>
-      link.subLinks?.some((sub) => sub.href === pathname)
+      link.subLinks?.some((sub) => pathname.startsWith(sub.href))
     );
     return currentLink?.name || "";
   });
@@ -32,8 +32,8 @@ export default function Sidebar({
         <nav className="space-y-2">
           {navigationLinks.map((link) => {
             if (link.subLinks) {
-              const isMenuActive = link.subLinks.some(
-                (sub) => pathname === sub.href
+              const isMenuActive = link.subLinks.some((sub) =>
+                pathname.startsWith(sub.href)
               );
               return (
                 <CollapsibleNavLink
@@ -45,16 +45,20 @@ export default function Sidebar({
                   onToggle={() =>
                     setOpenMenu(openMenu === link.name ? "" : link.name)
                   }
-                  // onSubLinkClick ya no es necesario, el <Link> se encarga
                 />
               );
             }
+
+            const isActive =
+              link.href === "/aliado/dashboard"
+                ? pathname === link.href
+                : pathname.startsWith(link.href);
 
             return (
               <SingleNavLink
                 key={link.name}
                 link={link}
-                isActive={pathname === link.href}
+                isActive={isActive}
                 onClick={() => setOpenMenu("")}
               />
             );
