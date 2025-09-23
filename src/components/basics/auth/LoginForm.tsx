@@ -1,34 +1,127 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PasswordInput from "./PasswordInput";
 import UserLoginIcon from "@/src/components/icons/UserLoginIcon";
 import Link from "next/link";
+import { createClient } from "@/src/lib/supabase/client";
+import { useRouter, useSearchParams } from "next/navigation";
 
-const recoveryAccountLink = "/admin/login/recuperar-cuenta?step=1";
+const recoveryAccountLink = "/auth/forgot-password";
 
 export default function LoginForm({
-  title = "Inserte su mensaje",
+  title = "Iniciar sesión",
 }: {
   title?: string;
 }) {
   // --- STATE MANAGEMENT ---
-  // Guardamos los valores de los inputs y el estado de la UI
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const hasRedirectedRef = useRef(false);
+
+  // Helpers: derive role and home path
+  const homeForRole = (role?: string | null) => {
+    switch ((role || "").toLowerCase()) {
+      case "admin":
+        return "/admin/dashboard";
+      case "market":
+        return "/aliado/dashboard";
+      case "delivery":
+        return "/repartidor/home";
+      default:
+        return "/user/home";
+    }
+  };
+
+  const resolveRole = async (supabase: ReturnType<typeof createClient>) => {
+    const { data: sessionRes } = await supabase.auth.getSession();
+    const user = sessionRes.session?.user;
+    if (!user) return null;
+    try {
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role, user_role")
+        .eq("id", user.id)
+        .single();
+      if (!profileError) {
+        const pr = (profile as any) || {};
+        return pr.role || pr.user_role || null;
+      }
+    } catch (e) {
+      // ignore and fallback
+    }
+    const am = (user.app_metadata as any) || {};
+    const um = (user.user_metadata as any) || {};
+    return am.user_role || am.role || um.user_role || um.role || null;
+  };
+
+  // Redirección si ya hay sesión activa (p. ej., al volver de OAuth)
+  useEffect(() => {
+    const supabase = createClient();
+    let mounted = true;
+    (async () => {
+      const { data } = await supabase.auth.getSession();
+      if (mounted && data.session && !hasRedirectedRef.current) {
+        const next = searchParams.get("next");
+        let to = next || homeForRole(await resolveRole(supabase));
+        hasRedirectedRef.current = true;
+        router.replace(to);
+      }
+    })();
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session && !hasRedirectedRef.current) {
+          const handle = async () => {
+            const next = searchParams.get("next");
+            const role = await resolveRole(supabase);
+            const to = next || homeForRole(role);
+            hasRedirectedRef.current = true;
+            router.replace(to);
+          };
+          // run and ignore promise
+          handle();
+        }
+      }
+    );
+    return () => {
+      mounted = false;
+      listener.subscription.unsubscribe();
+    };
+  }, [router, searchParams]);
 
   // --- HANDLERS ---
-  // Función para manejar el envío del formulario
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Formulario enviado con:", {
-      email,
-      password,
-      rememberMe,
-    });
-    // Aquí iría tu lógica de autenticación (ej. llamar a una API)
+    setIsLoading(true);
+    setError(null);
+    const supabase = createClient();
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
+      const next = searchParams.get("next");
+      const role = await resolveRole(supabase);
+      const to = next || homeForRole(role);
+      // Recordarme: Supabase por defecto usa localStorage; si quieres sessionStorage podemos ajustarlo.
+      router.replace(to);
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Ocurrió un error al iniciar sesión"
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -54,13 +147,14 @@ export default function LoginForm({
             </span>
             <input
               autoComplete="email"
-              type="text"
+              type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Ingresa la información"
+              placeholder="Ingresa tu correo"
               className="w-full pl-10 pr-4 py-3 border border-gray-400 rounded-xl font-roboto"
               required
+              disabled={isLoading}
             />
           </div>
         </div>
@@ -71,8 +165,17 @@ export default function LoginForm({
           passwordValue={password}
           displayPassword={setShowPassword}
           myOnChange={setPassword}
-          label="Nueva contraseña"
+          label="Contraseña"
+          disabled={isLoading}
         />
+
+        {/* --- MENSAJE DE ERROR --- */}
+        {error && (
+          <p className="text-sm text-red-600 px-2" role="alert">
+            {error}
+          </p>
+        )}
+
         {/* --- OPCIONES (RECORDARME Y OLVIDÉ CONTRASEÑA) --- */}
         <div className="flex items-center justify-between text-sm px-2 text-center">
           <div className="flex items-center gap-2">
@@ -82,6 +185,7 @@ export default function LoginForm({
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
               className="h-4 w-4 text-emerald-600 border-gray-300 rounded "
+              disabled={isLoading}
             />
             <label htmlFor="remember" className="text-gray-600">
               Recordarme
@@ -98,9 +202,10 @@ export default function LoginForm({
         {/* --- BOTÓN DE INICIAR SESIÓN --- */}
         <button
           type="submit"
-          className="w-full bg-primary text-white font-medium py-2 px-4 rounded-xl hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-300"
+          className="w-full bg-primary text-white font-medium py-2 px-4 rounded-xl hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors duration-300 disabled:opacity-70"
+          disabled={isLoading}
         >
-          Iniciar Sesión
+          {isLoading ? "Ingresando..." : "Iniciar Sesión"}
         </button>
       </form>
     </>

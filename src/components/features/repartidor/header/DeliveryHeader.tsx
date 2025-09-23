@@ -5,11 +5,30 @@ import Link from "next/link";
 import Logo from "@/src/components/basics/Logo";
 import Image from "next/image";
 import Avatar from "@/public/carlosAvatar.svg";
+import { useEffect, useState } from "react";
+import { createClient } from "@/src/lib/supabase/client";
 
 const logoFill = "white";
 const logoURL = "/repartidor/home";
 
 export default function Header() {
+  const [displayName, setDisplayName] = useState<string>("");
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      const user = data.user;
+      const meta = (user?.user_metadata as Record<string, any>) || {};
+      const name =
+        meta.full_name ||
+        meta.name ||
+        meta.first_name ||
+        (typeof user?.email === "string" ? user.email.split("@")[0] : null) ||
+        "Repartidor";
+      setDisplayName(name as string);
+    });
+  }, []);
+
   return (
     <>
       <header
@@ -46,7 +65,9 @@ export default function Header() {
               <Link href={logoURL}>
                 <Logo fill={logoFill} />
               </Link>
-              <p className="block font-bold">Hola, Carlos 👋</p>
+              <p className="block font-bold">
+                Hola, {displayName || "Repartidor"} 👋
+              </p>
             </div>
 
             {/* Lado Derecho: Imagen de repartidor */}

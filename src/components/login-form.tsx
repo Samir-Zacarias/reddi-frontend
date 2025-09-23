@@ -14,7 +14,8 @@ import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export function LoginForm({
   className,
@@ -25,6 +26,49 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const hasRedirectedRef = useRef(false);
+
+  // Construir URL base para redirecciones (permite override por env)
+  const siteUrl =
+    (typeof window !== "undefined" &&
+      (process.env.NEXT_PUBLIC_SITE_URL || window.location.origin)) ||
+    undefined;
+
+  // Listener de sesión: útil cuando OAuth vuelve y el usuario permanece en la misma vista
+  useEffect(() => {
+    const supabase = createClient();
+    let mounted = true;
+    const debug = !!process.env.NEXT_PUBLIC_DEBUG_AUTH;
+    (async () => {
+      const { data } = await supabase.auth.getSession();
+      if (debug) console.log("[auth] initial getSession", data.session);
+      if (mounted && data.session && !hasRedirectedRef.current) {
+        const next = searchParams.get("next") || "/user/home";
+        hasRedirectedRef.current = true;
+        if (debug) console.log("[auth] redirecting to", next);
+        router.replace(next);
+      }
+    })();
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (process.env.NEXT_PUBLIC_DEBUG_AUTH)
+          console.log("[auth] onAuthStateChange", _event, !!session);
+        if (session && !hasRedirectedRef.current) {
+          const next = searchParams.get("next") || "/user/home";
+          hasRedirectedRef.current = true;
+          if (process.env.NEXT_PUBLIC_DEBUG_AUTH)
+            console.log("[auth] redirecting (event) to", next);
+          router.replace(next);
+        }
+      }
+    );
+    return () => {
+      mounted = false;
+      listener.subscription.unsubscribe();
+    };
+  }, [router, searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,11 +83,50 @@ export function LoginForm({
       });
       if (error) throw error;
       // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
+      router.push("/user/home");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    const supabase = createClient();
+    setIsGoogleLoading(true);
+    setError(null);
+    try {
+      // Redirigimos a una ruta pública (login) con parámetro next para que la sesión se intercambie antes del middleware.
+      const redirectPublic = siteUrl
+        ? `${siteUrl}/auth/login?next=/user/home`
+        : undefined;
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: redirectPublic,
+          queryParams: {
+            // prompt: 'select_account'
+          },
+        },
+      });
+      if (error) throw error;
+      // Con OAuth normal habrá un redirect de página completa; data.url puede usarse para forzar navegación.
+      if (data?.url) {
+        if (process.env.NEXT_PUBLIC_DEBUG_AUTH) {
+          console.log("[auth] OAuth data.url", data.url);
+        }
+        window.location.href = data.url; // full navigation para asegurar intercambio de código
+      }
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Error al iniciar sesión con Google"
+      );
+      if (process.env.NEXT_PUBLIC_DEBUG_AUTH)
+        console.error("[auth] google error", err);
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
@@ -92,6 +175,24 @@ export function LoginForm({
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
+              <div className="relative">
+                <div className="my-4 flex items-center">
+                  <span className="h-px flex-1 bg-muted" />
+                  <span className="px-2 text-xs uppercase text-muted-foreground">
+                    o continúa con
+                  </span>
+                  <span className="h-px flex-1 bg-muted" />
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleGoogleLogin}
+                  disabled={isLoading || isGoogleLoading}
+                >
+                  {isGoogleLoading ? "Conectando..." : "Google"}
+                </Button>
+              </div>
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}

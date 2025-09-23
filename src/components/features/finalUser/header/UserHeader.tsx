@@ -12,6 +12,9 @@ import UserCarIcon from "@/src/components/icons/UserCarIcon";
 import AddressSlider from "@/src/components/features/finalUser/adressSlider/AddressSlider";
 import { UserHeaderData } from "@/src/lib/finalUser/type";
 import { useState, useEffect } from "react";
+import LogoutHeaderIcon from "@/src/components/icons/LogoutHeaderIcon";
+import { createClient } from "@/src/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 const badgeColor = "bg-red-500";
 
@@ -20,6 +23,13 @@ export default function Header({ userData }: { userData: UserHeaderData }) {
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(true); // Para mostrar/ocultar la barra de búsqueda según el scroll
   const [isClient, setIsClient] = useState(false); //Para verificar si se renderizó en el cliente
   const [isAddressMenuVisible, setIsAddressMenuVisible] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
 
   const toggleAddressMenu = () => {
     setIsAddressMenuVisible(!isAddressMenuVisible);
@@ -131,6 +141,15 @@ export default function Header({ userData }: { userData: UserHeaderData }) {
                   color={badgeColor}
                   className="rounded-full"
                 />
+              </button>
+              <button
+                type="button"
+                onClick={handleLogout}
+                aria-label="Cerrar sesión"
+                className="relative"
+                title="Cerrar sesión"
+              >
+                <LogoutHeaderIcon fill="white" />
               </button>
             </div>
           </div>

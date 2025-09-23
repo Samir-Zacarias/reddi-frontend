@@ -6,8 +6,17 @@ import BellIcon from "@/src/components/icons/BellIcon";
 import LogoutIcon from "@/src/components/icons/LogoutHeaderIcon";
 import Badge from "@/src/components/basics/header/Badge";
 import ReddiLogo from "@/src/components/icons/ReddiLogo";
+import { createClient } from "@/src/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/admin/login");
+  };
   return (
     <header className="fixed bg-white w-full font-manrope z-50">
       <div className="flex items-center">
@@ -49,6 +58,7 @@ export default function Header() {
           <button
             type="button"
             className="rounded-full p-1 text-gray-400  px-4"
+            onClick={handleLogout}
           >
             <LogoutIcon className="h-6 w-6" aria-hidden="true" fill="#454545" />
           </button>
