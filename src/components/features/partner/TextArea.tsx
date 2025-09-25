@@ -1,4 +1,5 @@
 import React from "react";
+import InputNotice from "./InputNotice";
 
 type TextAreaInputProps = {
   id: string;
@@ -9,7 +10,9 @@ type TextAreaInputProps = {
   placeholder?: string;
   rows?: number;
   className?: string;
-} & React.TextareaHTMLAttributes<HTMLTextAreaElement>; // Permite pasar cualquier otra prop nativa de textarea
+  required?: boolean;
+  error?: boolean;
+};
 
 export default function TextAreaInput({
   id,
@@ -20,7 +23,8 @@ export default function TextAreaInput({
   placeholder,
   rows = 4, // Un valor por defecto razonable
   className,
-  ...rest
+  required,
+  error,
 }: TextAreaInputProps) {
   return (
     <>
@@ -29,6 +33,7 @@ export default function TextAreaInput({
         className="block text-sm font-medium text-gray-700 mb-1 font-roboto"
       >
         {label}
+        {required && <span className="text-red-500"> *</span>}
       </label>
       <textarea
         id={id}
@@ -39,10 +44,12 @@ export default function TextAreaInput({
         placeholder={placeholder}
         className={
           className ||
-          "block w-full border border-[#D9DCE3] rounded-xl placeholder-gray-400 sm:text-sm p-3 font-roboto"
+          `block w-full border border-[#D9DCE3] rounded-xl placeholder-gray-400 sm:text-sm p-3 font-roboto ${
+            error && "border-error"
+          }`
         }
-        {...rest}
       />
+      {error && <InputNotice variant="error" />}
     </>
   );
 }

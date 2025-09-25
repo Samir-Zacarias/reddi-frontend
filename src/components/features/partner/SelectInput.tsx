@@ -1,4 +1,5 @@
 import React from "react";
+import InputNotice from "./InputNotice";
 
 type SelectInputProps<T> = {
   id: string;
@@ -11,7 +12,9 @@ type SelectInputProps<T> = {
   placeholder?: string;
   className?: string;
   name?: string;
-} & React.SelectHTMLAttributes<HTMLSelectElement>;
+  required?: boolean;
+  error?: boolean;
+};
 
 export default function SelectInput<T>({
   id,
@@ -21,10 +24,11 @@ export default function SelectInput<T>({
   getOptionLabel,
   value,
   onChange,
-  placeholder = "Seleccione",
+  placeholder,
   className = "",
-  name,
-  ...rest // 3. Recoge todos los demás atributos
+  name = id,
+  required,
+  error,
 }: SelectInputProps<T>) {
   return (
     <div className={className}>
@@ -33,14 +37,16 @@ export default function SelectInput<T>({
         className="block text-sm font-medium text-gray-700 mb-1 font-roboto"
       >
         {label}
+        {required && <span className="text-red-500"> *</span>}
       </label>
       <select
         id={id}
         name={name || id}
         value={value}
         onChange={onChange}
-        className="block w-full rounded-xl border border-[#D9DCE3] sm:text-sm p-2 font-roboto"
-        {...rest} // 4. Aplica los atributos extra al <select>
+        className={`block w-full rounded-xl border border-[#D9DCE3] sm:text-sm p-2 font-roboto ${
+          error && "border-error"
+        }`}
       >
         {placeholder && <option value="">{placeholder}</option>}
         {options.map((option) => {
@@ -53,6 +59,7 @@ export default function SelectInput<T>({
           );
         })}
       </select>
+      {error && <InputNotice variant="error" />}
     </div>
   );
 }

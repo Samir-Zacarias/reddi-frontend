@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import BasicInput from "@/src/components/features/partner/BasicInput";
 import Checkbox from "@/src/components/features/partner/CheckBox";
 import FileUploadZone from "@/src/components/features/partner/FileUploadZone";
@@ -9,6 +7,10 @@ import SelectInput from "@/src/components/features/partner/SelectInput";
 import TextArea from "@/src/components/features/partner/TextArea";
 import ArrowLeftIcon from "@/src/components/icons/ArrowLeftIcon";
 import ArrowRightIcon from "@/src/components/icons/ArrowRightIcon";
+import InputNotice from "@/src/components/features/partner/InputNotice";
+import { IDishFormState } from "./NewDishWizard";
+import { useState, useRef } from "react";
+import { isFieldInvalid } from "@/src/lib/partner/utils";
 
 const categoryOptions = [
   { id: "entrantes", name: "Entrantes" },
@@ -17,52 +19,28 @@ const categoryOptions = [
   { id: "bebidas", name: "Bebidas" },
 ];
 
-interface IDishFormState {
-  dishName: string;
-  basePrice: string;
-  previousPrice: string;
-  discount: string;
-  unit: string;
-  estimatedTime: string;
-  description: string;
-  category: string;
-  isAvailable: boolean;
-  taxIncluded: boolean;
+interface NewDishStep1Props {
+  formData: IDishFormState;
+  requiredFields: (keyof IDishFormState)[];
+  updateFormData: (newData: Partial<IDishFormState>) => void;
+  onGoBack: () => void;
+  onNextStep: () => void;
+  onPreview: () => void;
 }
 
-export default function NewDishStep({}) {
-  const router = useRouter();
-  const fallbackUrl = "/aliado/dashboard/productos";
-
-  const handleGoBackSafely = () => {
-    // document.referrer contiene la URL de la página que enlazó a la actual.
-    // window.location.origin contiene el dominio actual (ej: "https://misitio.com").
-
-    // Comprobamos si hay un referrer y si pertenece al mismo dominio que la app.
-    if (
-      document.referrer &&
-      document.referrer.startsWith(window.location.origin)
-    ) {
-      // Si es seguro, simplemente volvemos atrás.
-      router.back();
-    } else {
-      // Si no es seguro (o no hay referrer), vamos a la URL por defecto.
-      router.push(fallbackUrl);
-    }
-  };
-
-  const [formData, setFormData] = useState<IDishFormState>({
-    dishName: "",
-    basePrice: "",
-    previousPrice: "",
-    discount: "",
-    unit: "",
-    estimatedTime: "",
-    description: "",
-    category: "",
-    isAvailable: true,
-    taxIncluded: false,
-  });
+export default function NewDishStep1({
+  formData,
+  requiredFields,
+  onPreview,
+  updateFormData,
+  onGoBack,
+  onNextStep,
+}: NewDishStep1Props) {
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof IDishFormState, boolean>>
+  >({});
+  const formRef = useRef<HTMLFormElement>(null);
+  const fileUploadRef = useRef<HTMLDivElement>(null);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -70,53 +48,143 @@ export default function NewDishStep({}) {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    updateFormData({ [name]: value });
+
+    if (errors[name as keyof IDishFormState]) {
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors[name as keyof IDishFormState];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleFileChange = (file: File | null) => {
+    const fieldName: keyof IDishFormState = "image";
+
+    updateFormData({ [fieldName]: file });
+
+    // Limpia el error para el campo de la imagen
+    if (errors[fieldName]) {
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors[fieldName];
+        return newErrors;
+      });
+    }
   };
 
   // Handler específico para checkboxes
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: checked,
-    }));
+    updateFormData({ [name]: checked });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newErrors: Partial<Record<keyof IDishFormState, boolean>> = {};
+    // Validamos cada campo requerido
+    requiredFields.forEach((field) => {
+      if (isFieldInvalid(formData[field])) {
+        newErrors[field] = true;
+      }
+    });
+
+    // ACTUALIZAMOS el estado de errores si encontramos alguno
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      const firstErrorField = Object.keys(newErrors)[0] as keyof IDishFormState;
+      if (firstErrorField === "image") {
+        fileUploadRef.current?.focus();
+      } else {
+        const elementToFocus = formRef.current?.querySelector(
+          `[name="${firstErrorField}"]`
+        ) as HTMLElement;
+        elementToFocus?.focus();
+      }
+
+      return;
+    }
+
+    // Si todo es válido, continuamos
+    setErrors({}); // Limpiamos cualquier error residual
+    onNextStep();
+  };
+
+  const handlePreview = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const newErrors: Partial<Record<keyof IDishFormState, boolean>> = {};
+    // Validamos cada campo requerido
+    requiredFields.forEach((field) => {
+      if (isFieldInvalid(formData[field])) {
+        newErrors[field] = true;
+      }
+    });
+
+    // ACTUALIZAMOS el estado de errores si encontramos alguno
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      const firstErrorField = Object.keys(newErrors)[0] as keyof IDishFormState;
+      if (firstErrorField === "image") {
+        fileUploadRef.current?.focus();
+      } else {
+        const elementToFocus = formRef.current?.querySelector(
+          `[name="${firstErrorField}"]`
+        ) as HTMLElement;
+        elementToFocus?.focus();
+      }
+
+      return;
+    }
+
+    // Si todo es válido, continuamos
+    setErrors({}); // Limpiamos cualquier error residual
+    onPreview();
   };
 
   return (
     <>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <h2 className="text-lg text-gray-900 mb-4 font-inter">
+        Información Básica
+      </h2>
+      <form onSubmit={handleSubmit} ref={formRef} noValidate>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Columna Izquierda: Foto */}
           <div className="lg:col-span-2">
-            <FileUploadZone />
+            <FileUploadZone
+              onFileChange={handleFileChange}
+              value={formData.image}
+              ref={fileUploadRef}
+              required
+            />
+            {errors.image && <InputNotice variant="error" />}
           </div>
 
           {/* Columna Derecha: Inputs */}
           <div className="lg:col-span-2 space-y-6">
             <BasicInput
               id="dishName"
-              name="dishName"
               label="Nombre del plato"
               placeholder="Ingresar la información"
               value={formData.dishName}
               onChange={handleChange}
+              required
+              error={errors.dishName}
             />
+
             <BasicInput
               id="basePrice"
-              name="basePrice"
               label="Precio base (USD)"
               placeholder="Ingresar la información"
               value={formData.basePrice}
               onChange={handleChange}
+              required
+              error={errors.basePrice}
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <BasicInput
                 id="previousPrice"
-                name="previousPrice"
                 label="Precio anterior (opcional)"
                 placeholder="Ingresar la información"
                 value={formData.previousPrice}
@@ -124,7 +192,6 @@ export default function NewDishStep({}) {
               />
               <BasicInput
                 id="discount"
-                name="discount"
                 label="Descuento %"
                 placeholder="Ingresar la información"
                 value={formData.discount}
@@ -135,19 +202,22 @@ export default function NewDishStep({}) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <BasicInput
                 id="unit"
-                name="unit"
                 label="Unidad"
                 placeholder="/u"
                 value={formData.unit}
                 onChange={handleChange}
+                required
+                error={errors.unit}
               />
+
               <BasicInput
                 id="estimatedTime"
-                name="estimatedTime"
                 label="Tiempo estimado"
                 placeholder="Ejm. 25-35 min"
                 value={formData.estimatedTime}
                 onChange={handleChange}
+                required
+                error={errors.estimatedTime}
               />
             </div>
 
@@ -159,20 +229,26 @@ export default function NewDishStep({}) {
                 placeholder="Ingresa la información"
                 value={formData.description}
                 onChange={handleChange}
+                required
+                error={errors.description}
               />
             </div>
             <div>
-              <SelectInput
-                id="category"
-                name="category"
-                label="Categorías"
-                placeholder="Seleccione"
-                options={categoryOptions}
-                value={formData.category}
-                onChange={handleChange}
-                getOptionValue={(option) => option.id}
-                getOptionLabel={(option) => option.name}
-              />
+              <div>
+                <SelectInput
+                  id="category"
+                  name="category"
+                  label="Categorías"
+                  placeholder="Seleccione"
+                  options={categoryOptions}
+                  value={formData.category}
+                  onChange={handleChange}
+                  getOptionValue={(option) => option.id}
+                  getOptionLabel={(option) => option.name}
+                  required
+                  error={errors.category}
+                />
+              </div>
             </div>
 
             <div className="flex items-center space-x-6">
@@ -197,7 +273,7 @@ export default function NewDishStep({}) {
           <button
             type="button"
             className="text-sm font-medium text-gray-700 hover:text-gray-900 flex items-center"
-            onClick={handleGoBackSafely}
+            onClick={onGoBack}
           >
             <ArrowLeftIcon />
             Volver
@@ -207,6 +283,7 @@ export default function NewDishStep({}) {
             <button
               type="button"
               className="px-5 py-2.5 text-sm font-medium text-white bg-primary rounded-xl hover:bg-green-700 focus:outline-none"
+              onClick={handlePreview}
             >
               Vista previa
             </button>

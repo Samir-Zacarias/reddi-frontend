@@ -1,5 +1,3 @@
-import NewDishSection from "@/src/components/features/partner/dashboard/menu/newDish/NewDishStep1";
-
 export default function NewProductPage() {
   return (
     <div className="bg-[#F0F2F5] px-8 py-6 min-h-screen">
@@ -10,7 +8,6 @@ export default function NewProductPage() {
         <h2 className="text-lg text-gray-900 mb-4 font-inter">
           Información Básica
         </h2>
-        <NewDishSection />
       </section>
     </div>
   );

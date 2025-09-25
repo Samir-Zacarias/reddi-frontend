@@ -1,4 +1,5 @@
 import React from "react";
+import InputNotice from "@/src/components/features/partner/InputNotice";
 
 type SearchInputProps = {
   id: string;
@@ -9,6 +10,8 @@ type SearchInputProps = {
   className?: string;
   name?: string;
   icon?: React.ReactNode;
+  required?: boolean;
+  error?: boolean;
 };
 
 export default function BasicInput({
@@ -18,8 +21,10 @@ export default function BasicInput({
   value,
   onChange,
   className = "",
-  name,
+  name = id,
   icon,
+  required = false,
+  error,
 }: SearchInputProps) {
   return (
     <div className={className}>
@@ -28,6 +33,7 @@ export default function BasicInput({
         className="block text-sm font-medium text-gray-700 mb-1 font-roboto"
       >
         {label}
+        {required && <span className="text-red-500"> *</span>}
       </label>
       <div className="relative">
         {icon && (
@@ -43,10 +49,11 @@ export default function BasicInput({
           onChange={onChange}
           className={`block w-full rounded-xl border-[#D9DCE3] border ${
             icon && "pl-10"
-          } sm:text-sm p-2 font-roboto`}
+          } sm:text-sm p-2 font-roboto ${error && "border-error"}`}
           placeholder={placeholder}
         />
       </div>
+      {error && <InputNotice variant="error" />}
     </div>
   );
 }
