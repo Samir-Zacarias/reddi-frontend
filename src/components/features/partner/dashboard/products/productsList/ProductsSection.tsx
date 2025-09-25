@@ -5,8 +5,8 @@ import { useState } from "react";
 import Link from "next/link";
 import ProductItem from "./ProductItem";
 import { ProductData } from "@/src/lib/partner/dashboard/type";
-import SearchInput from "@/src/components/features/partner/BasicInput";
-import SelectInput from "@/src/components/features/partner/SelectInput";
+import SearchInput from "@/src/components/basics/BasicInput";
+import SelectInput from "@/src/components/basics/SelectInput";
 import SearchPartnerIcon from "@/src/components/icons/SearchPartnerIcon";
 
 type ProductsListProps = {

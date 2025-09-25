@@ -1,5 +1,5 @@
 import React from "react";
-import InputNotice from "./InputNotice";
+import InputNotice from "../../basics/InputNotice";
 
 type TextAreaInputProps = {
   id: string;

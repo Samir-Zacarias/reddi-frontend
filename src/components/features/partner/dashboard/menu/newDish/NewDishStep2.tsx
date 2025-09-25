@@ -1,6 +1,6 @@
 "use client";
 
-import BasicInput from "@/src/components/features/partner/BasicInput";
+import BasicInput from "@/src/components/basics/BasicInput";
 import Checkbox from "@/src/components/features/partner/CheckBox";
 import ArrowLeftIcon from "@/src/components/icons/ArrowLeftIcon";
 import ArrowRightIcon from "@/src/components/icons/ArrowRightIcon";
@@ -333,7 +333,7 @@ export default function NewDishStep2({
             </button>
             <button
               type="button"
-              className="px-5 py-2.5 text-sm font-medium text-gray-800 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 focus:outline-none"
+              className="px-5 py-2.5 text-sm font-medium text-gray-800 bg-white border border-black rounded-xl hover:bg-gray-100 focus:outline-none"
             >
               Guardar y salir
             </button>

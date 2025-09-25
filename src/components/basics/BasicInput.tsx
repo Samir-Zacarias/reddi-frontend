@@ -1,5 +1,5 @@
 import React from "react";
-import InputNotice from "@/src/components/features/partner/InputNotice";
+import InputNotice from "@/src/components/basics/InputNotice";
 
 type SearchInputProps = {
   id: string;

@@ -1,13 +1,13 @@
 "use client";
 
-import BasicInput from "@/src/components/features/partner/BasicInput";
+import BasicInput from "@/src/components/basics/BasicInput";
 import Checkbox from "@/src/components/features/partner/CheckBox";
 import FileUploadZone from "@/src/components/features/partner/FileUploadZone";
-import SelectInput from "@/src/components/features/partner/SelectInput";
+import SelectInput from "@/src/components/basics/SelectInput";
 import TextArea from "@/src/components/features/partner/TextArea";
 import ArrowLeftIcon from "@/src/components/icons/ArrowLeftIcon";
 import ArrowRightIcon from "@/src/components/icons/ArrowRightIcon";
-import InputNotice from "@/src/components/features/partner/InputNotice";
+import InputNotice from "@/src/components/basics/InputNotice";
 import { IDishFormState } from "./NewDishWizard";
 import { useState, useRef } from "react";
 import { isFieldInvalid } from "@/src/lib/partner/utils";
