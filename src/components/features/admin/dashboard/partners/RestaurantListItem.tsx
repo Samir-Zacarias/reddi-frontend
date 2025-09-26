@@ -11,8 +11,8 @@ const StatusBadge = ({ state }: { state: Restaurant["state"] }) => {
 
   return (
     <span
-      className={`px-3 py-1 text-xs font-semibold rounded-full ${
-        isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+      className={`py-1 px-2 text-xs font-medium rounded-lg ${
+        isActive ? "bg-green-100 text-[#04910C]" : "bg-red-100 text-[#FF0000]"
       }`}
     >
       {isActive ? "Activo" : "Inactivo"}
@@ -26,17 +26,18 @@ interface UserListItemProps {
 
 export default function UserListItem({ restaurant }: UserListItemProps) {
   return (
-    <tr className="border-b border-gray-200 hover:bg-gray-50">
+    <tr className="border-b border-gray-200 hover:bg-gray-50 font-roboto">
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
         {restaurant.id}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
         <div className="flex items-center">
-          <div className="flex-shrink-0 h-8 w-8 relative">
+          {/* Al implementar poner el border-4*/}
+          <div className="flex-shrink-0 h-8 w-8 relative border-primary rounded-full">
             {/* Placeholder para la imagen */}
             <Image
               className="h-8 w-8 rounded-full"
-              src="/"
+              src={restaurant.imageUrl}
               fill={true}
               alt={`${restaurant.name} logo`}
             />
@@ -61,13 +62,25 @@ export default function UserListItem({ restaurant }: UserListItemProps) {
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <div className="flex items-center space-x-4 text-gray-500">
-          <button className="hover:text-blue-600" aria-label="Visualizar">
+          <button
+            type="button"
+            id={`view-${restaurant.id}`}
+            aria-label="Visualizar"
+          >
             <EyeLoginIcon fill="#6A6C71" />
           </button>
-          <button className="hover:text-yellow-600" aria-label="Editar">
+          <button
+            type="button"
+            id={`edit-${restaurant.id}`}
+            aria-label="Editar"
+          >
             <EditPartnerIcon fill="#6A6C71" />
           </button>
-          <button className="hover:text-red-600" aria-label="Eliminar">
+          <button
+            type="button"
+            id={`del-${restaurant.id}`}
+            aria-label="Eliminar"
+          >
             <DeletePartnerIcon fill="#6A6C71" />
           </button>
         </div>

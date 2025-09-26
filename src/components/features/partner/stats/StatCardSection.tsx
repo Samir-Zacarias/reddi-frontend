@@ -28,7 +28,7 @@ export default function StatCardSection<T>({
 
   return (
     <div
-      className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-${n} mb-4`}
+      className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-${n} xl:grid-cols-${n} mb-4`}
     >
       {stats.map((item) => {
         const key = getKey(item);

@@ -50,6 +50,7 @@ export default function NewDishStep1({
     const { name, value } = e.target;
     updateFormData({ [name]: value });
 
+    // Limpieza de errores para el campo modificado
     if (errors[name as keyof IDishFormState]) {
       setErrors((prevErrors) => {
         const newErrors = { ...prevErrors };

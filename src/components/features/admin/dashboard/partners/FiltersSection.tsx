@@ -53,7 +53,7 @@ export default function FiltersSection({
     }
 
     // Navegamos a la nueva URL. Usamos push para que el usuario pueda usar el botón "atrás"
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const handleClearFilters = () => {
@@ -63,7 +63,7 @@ export default function FiltersSection({
     setState("");
 
     // 2. Navegamos a la URL sin parámetros de filtro
-    router.push(pathname);
+    router.push(pathname, { scroll: false });
   };
 
   return (
@@ -102,8 +102,8 @@ export default function FiltersSection({
           getOptionLabel={(option) => option.label}
           label="Estados"
           placeholder="Seleccione"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
+          value={state}
+          onChange={(e) => setState(e.target.value)}
         />
       </div>
 

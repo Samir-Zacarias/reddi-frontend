@@ -14,7 +14,7 @@ export default function PartnerDashboardPage() {
       <h1 className="font-semibold">Dashboard</h1>
       <h2 className="font-roboto font-normal mb-5">Resumen de tu negocio</h2>
       {/* Fila 1: Tarjetas de Estadísticas */}
-      <Suspense fallback={<StatSectionSkeleton count={4} />}>
+      <Suspense fallback={<StatSectionSkeleton />}>
         <StatSectionServer />
       </Suspense>
       {/* Fila 2: Acciones rápidas */}

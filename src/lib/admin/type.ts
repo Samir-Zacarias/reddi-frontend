@@ -5,6 +5,7 @@ export type StatData = {
 
 export interface Restaurant {
   id: string;
+  imageUrl: string;
   name: string;
   nit: string;
   address: string;
@@ -12,3 +13,7 @@ export interface Restaurant {
   totalOrders: string;
   state: "open" | "closed";
 }
+
+export type OrderDir = "asc" | "desc";
+
+export type Sortables = "id" | "name" | "totalOrders";

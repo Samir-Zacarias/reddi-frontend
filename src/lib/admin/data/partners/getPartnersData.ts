@@ -1,22 +1,20 @@
-import FiltersSection from "@/src/components/features/admin/dashboard/partners/FiltersSection";
-import RestaurantList, {
-  RestaurantListProps,
-} from "@/src/components/features/admin/dashboard/partners/RestaurantList";
+import { RestaurantListProps } from "@/src/components/features/admin/dashboard/partners/RestaurantList";
 import { Restaurant } from "@/src/lib/admin/type";
+import { getRandomNumberFrom1To10 } from "@/src/lib/utils";
 
-const businessSelect = [
-  { value: "res", label: "Restaurante" },
-  { value: "caf", label: "Cafetería" },
-];
-
-const stateSelect = [
-  { value: "open", label: "Activo" },
-  { value: "closed", label: "Inactivo" },
-];
+interface GetPartnersDataParams {
+  page?: number;
+  q?: string;
+  type?: string;
+  state?: string;
+  orderBy?: string;
+  order?: string;
+}
 
 const mockRestaurants: Restaurant[] = [
   {
     id: "#12345",
+    imageUrl: "/ellipse.svg",
     name: "Pizza express",
     nit: "900123456-7",
     address: "Calle 123#2322",
@@ -26,6 +24,7 @@ const mockRestaurants: Restaurant[] = [
   },
   {
     id: "#12346",
+    imageUrl: "/ellipse.svg",
     name: "Super Burger",
     nit: "900123456-8",
     address: "Avenida 45#12-3",
@@ -35,6 +34,7 @@ const mockRestaurants: Restaurant[] = [
   },
   {
     id: "#12347",
+    imageUrl: "/ellipse.svg",
     name: "Café del Sol",
     nit: "900123456-9",
     address: "Carrera 7#82-10",
@@ -44,6 +44,7 @@ const mockRestaurants: Restaurant[] = [
   },
   {
     id: "#12348",
+    imageUrl: "/ellipse.svg",
     name: "Tacos el Jefe",
     nit: "900123457-0",
     address: "Transversal 5#11-9",
@@ -53,6 +54,7 @@ const mockRestaurants: Restaurant[] = [
   },
   {
     id: "#12349",
+    imageUrl: "/ellipse.svg",
     name: "Sushi Time",
     nit: "900123457-1",
     address: "Calle 90#15-50",
@@ -67,22 +69,18 @@ const data: RestaurantListProps = {
   totalCount: mockRestaurants.length,
 };
 
-export default function AdminPartnerPage() {
-  return (
-    <div className="bg-[#F0F2F5] px-8 py-6 min-h-screen">
-      {/* Título */}
-      <h1 className="font-semibold">Gestión de aliados</h1>
-      <h2 className="font-roboto font-normal mb-5">
-        Comprueba los datos de tus aliados
-      </h2>
-      {/* Fila 1: Sección de filtros */}
-      <FiltersSection businessTypes={businessSelect} states={stateSelect} />
+const apiDelay = 500;
 
-      {/* Fila 2: Tabla de Restaurants */}
-      <RestaurantList
-        restaurants={data.restaurants}
-        totalCount={data.totalCount}
-      />
-    </div>
+export default async function getPartnersData({
+  page = 1,
+  q = "",
+  type = "",
+  state = "",
+  orderBy = "",
+  order = "",
+}: GetPartnersDataParams): Promise<RestaurantListProps> {
+  await new Promise((resolve) =>
+    setTimeout(resolve, apiDelay * getRandomNumberFrom1To10())
   );
+  return data;
 }

@@ -1,5 +1,5 @@
 import CardShell from "@/src/components/features/partner/CardShell";
-import Spinner from "@/src/components/features/partner/Spinner";
+import Spinner from "@/src/components/basics/Spinner";
 
 export default function NotificationItemSkeleton() {
   return (
