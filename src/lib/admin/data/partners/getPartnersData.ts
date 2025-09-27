@@ -1,6 +1,8 @@
-import { RestaurantListProps } from "@/src/components/features/admin/dashboard/partners/RestaurantList";
+import { RestaurantListProps } from "@/src/components/features/admin/partners/RestaurantList";
 import { Restaurant } from "@/src/lib/admin/type";
 import { getRandomNumberFrom1To10 } from "@/src/lib/utils";
+
+import { API_DELAY } from "@/src/lib/type";
 
 interface GetPartnersDataParams {
   page?: number;
@@ -68,8 +70,6 @@ const data: RestaurantListProps = {
   restaurants: mockRestaurants,
 };
 
-const apiDelay = 300;
-
 export default async function getPartnersData({
   page = 1,
   q = "",
@@ -79,7 +79,7 @@ export default async function getPartnersData({
   order = "",
 }: GetPartnersDataParams): Promise<RestaurantListProps> {
   await new Promise((resolve) =>
-    setTimeout(resolve, apiDelay * getRandomNumberFrom1To10())
+    setTimeout(resolve, API_DELAY * getRandomNumberFrom1To10())
   );
   return data;
 }

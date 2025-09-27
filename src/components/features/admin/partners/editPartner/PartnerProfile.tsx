@@ -6,6 +6,7 @@ import BasicInput from "@/src/components/basics/BasicInput";
 import SelectInput from "@/src/components/basics/SelectInput";
 import RadioInput from "@/src/components/basics/RadioInput";
 import CheckBox from "@/src/components/basics/CheckBox";
+import { partnersCategories } from "@/src/lib/type";
 
 const days = [
   { value: "monday", label: "Lunes" },
@@ -14,12 +15,6 @@ const days = [
   { value: "thursday", label: "Jueves" },
   { value: "friday", label: "Viernes" },
   { value: "saturday", label: "Sábado" },
-];
-
-const categoryOptions = [
-  { value: "restaurante", label: "Restaurante" },
-  { value: "cafeteria", label: "Cafetería" },
-  { value: "comida_rapida", label: "Comida Rápida" },
 ];
 
 const hoursOptions = Array.from({ length: 24 }, (_, i) => {
@@ -157,7 +152,7 @@ export default function BusinessProfileForm({
               <SelectInput
                 id="category"
                 name="category"
-                options={categoryOptions}
+                options={partnersCategories}
                 getOptionValue={(option) => option.value}
                 getOptionLabel={(option) => option.label}
                 label="Categorías"
@@ -277,6 +272,9 @@ export default function BusinessProfileForm({
               </label>
             </div>
             <div>
+              <h2 className="text-lg font-semibold text-primary mb-4">
+                Logo e Imágenes
+              </h2>
               <FileUploadZone
                 label="Logo del aliado"
                 onFileChange={(file) =>
@@ -285,7 +283,11 @@ export default function BusinessProfileForm({
               />
             </div>
             <div>
+              <h2 className="text-lg font-semibold text-primary mb-4">
+                Documentos Legales
+              </h2>
               <FileUploadZone
+                label="Documentos de verificación de la cuenta bancaria"
                 onFileChange={(file) =>
                   setFormData((prev) => ({ ...prev, documento: file }))
                 }

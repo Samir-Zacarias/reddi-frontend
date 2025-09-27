@@ -1,7 +1,6 @@
 import { getRandomNumberFrom1To10 } from "@/src/lib/utils";
 import { MainStatsData } from "../../type";
-
-const apiDelay = 500;
+import { API_DELAY } from "@/src/lib/type";
 
 const statsData: MainStatsData[] = [
   { statKey: "active_orders", value: "$350.4" },
@@ -12,7 +11,7 @@ const statsData: MainStatsData[] = [
 
 export default async function getMainStatsData() {
   await new Promise((resolve) =>
-    setTimeout(resolve, apiDelay * getRandomNumberFrom1To10())
+    setTimeout(resolve, API_DELAY * getRandomNumberFrom1To10())
   );
   return statsData;
 }

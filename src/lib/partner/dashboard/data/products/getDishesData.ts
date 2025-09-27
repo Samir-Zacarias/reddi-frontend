@@ -1,7 +1,7 @@
 import { getRandomNumberFrom1To10 } from "@/src/lib/utils";
 import { DishData } from "@/src/lib/partner/dashboard/type";
 
-const apiDelay = 500;
+import { API_DELAY } from "@/src/lib/type";
 
 const mockProducts: DishData[] = [
   {
@@ -44,7 +44,7 @@ const mockProducts: DishData[] = [
 
 export default async function getDishesData() {
   await new Promise((resolve) =>
-    setTimeout(resolve, apiDelay * getRandomNumberFrom1To10())
+    setTimeout(resolve, API_DELAY * getRandomNumberFrom1To10())
   );
   return mockProducts;
 }

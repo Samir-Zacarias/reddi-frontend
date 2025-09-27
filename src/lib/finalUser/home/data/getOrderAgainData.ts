@@ -1,14 +1,14 @@
 import { SliderCardProps } from "@/src/components/basics/itemsSlider/SliderItem";
 import { getRandomNumberFrom1To10 } from "@/src/lib/utils";
 
-const apiDelay = 500;
+import { API_DELAY } from "@/src/lib/type";
 
 // SliderCardProps[]
 export default async function getOrderAgainData(): Promise<SliderCardProps[]> {
   console.log("Fetching user data on the server...");
   // Simulación de llamada API
   await new Promise((resolve) =>
-    setTimeout(resolve, apiDelay * getRandomNumberFrom1To10())
+    setTimeout(resolve, API_DELAY * getRandomNumberFrom1To10())
   );
   const data: SliderCardProps[] = [
     {

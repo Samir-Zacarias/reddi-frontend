@@ -11,7 +11,7 @@ import SearchPartnerIcon from "@/src/components/icons/SearchPartnerIcon";
 
 type ProductsListProps = {
   products: ProductData[];
-  categories: { id: string; name: string }[];
+  categories: { value: string; label: string }[];
 };
 
 export default function ProductsSection({
@@ -58,8 +58,8 @@ export default function ProductsSection({
           id="category"
           label="Categoría"
           options={categories}
-          getOptionValue={(option) => option.id}
-          getOptionLabel={(option) => option.name}
+          getOptionValue={(option) => option.value}
+          getOptionLabel={(option) => option.label}
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         />

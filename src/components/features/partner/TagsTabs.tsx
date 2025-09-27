@@ -3,8 +3,8 @@
 import React from "react";
 
 type Tag = {
-  id: string;
-  name: string;
+  value: string;
+  label: string;
 };
 
 type CategoryTabsProps = {
@@ -21,12 +21,12 @@ export default function CategoryTabs({
   return (
     <>
       {tags.map((tag) => {
-        const isSelected = tag.id === selectedCategoryId;
+        const isSelected = tag.value === selectedCategoryId;
 
         return (
           <button
-            key={tag.id}
-            onClick={() => onSelectCategory(tag.id)}
+            key={tag.value}
+            onClick={() => onSelectCategory(tag.value)}
             className={`
               px-4 py-1 rounded-full text-sm md:text-base font-medium transition-color duration-200 ease-in-out 
               ${
@@ -36,7 +36,7 @@ export default function CategoryTabs({
               }
             `}
           >
-            {tag.name}
+            {tag.label}
           </button>
         );
       })}

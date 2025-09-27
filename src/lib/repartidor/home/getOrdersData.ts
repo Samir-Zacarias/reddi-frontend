@@ -2,6 +2,7 @@
 import { StatusType } from "@/src/components/features/repartidor/home/orderSection/OrderCard";
 import { getRandomNumberFrom1To10 } from "@/src/lib/utils";
 import { OrderData } from "@/src/lib/repartidor/type";
+import { API_DELAY } from "@/src/lib/type";
 
 const data: OrderData[] = [
   {
@@ -38,11 +39,9 @@ const data: OrderData[] = [
   },
 ];
 
-const apiDelay = 500;
-
 export default async function getOrdersData() {
   await new Promise((resolve) =>
-    setTimeout(resolve, apiDelay * getRandomNumberFrom1To10())
+    setTimeout(resolve, API_DELAY * getRandomNumberFrom1To10())
   );
   return data;
 }

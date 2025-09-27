@@ -12,8 +12,8 @@ import SearchPartnerIcon from "@/src/components/icons/SearchPartnerIcon";
 
 type DishesListProps = {
   dishes: DishData[];
-  categories: { id: string; name: string }[];
-  tags: { id: string; name: string }[];
+  categories: { value: string; label: string }[];
+  tags: { value: string; label: string }[];
 };
 export default function DishesSection({
   dishes,
@@ -36,7 +36,7 @@ export default function DishesSection({
       {/* Cabecera */}
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
         <h1 className="font-semibold text-gray-800 font-montserrat">
-          Lista de productos
+          Lista de platillos
         </h1>
         {/* Usamos Link para el botón de añadir nuevo producto */}
         <Link
@@ -61,8 +61,8 @@ export default function DishesSection({
           id="category"
           label="Categoría"
           options={categories}
-          getOptionValue={(option) => option.id}
-          getOptionLabel={(option) => option.name}
+          getOptionValue={(option) => option.value}
+          getOptionLabel={(option) => option.label}
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         />
