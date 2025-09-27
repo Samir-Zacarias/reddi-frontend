@@ -10,6 +10,7 @@ import InputNotice from "@/src/components/basics/InputNotice";
 import { IDishFormState } from "./NewDishWizard";
 import { useState, useRef } from "react";
 import { isFieldInvalid } from "@/src/lib/partner/utils";
+import { dishesTags } from "@/src/lib/type";
 
 const POSITIVE_NUMBER_REGEX = /^(0|[1-9]\d*)(\.\d+)?$/;
 const ESTIMATED_TIME_REGEX = /^\d{1,2}-\d{1,2}?min$/;
@@ -19,13 +20,6 @@ const mustBeNumber: (keyof IDishFormState)[] = [
   "basePrice",
   "previousPrice",
   "discount",
-];
-
-const categoryOptions = [
-  { id: "entrantes", name: "Entrantes" },
-  { id: "plato-fuerte", name: "Plato Fuerte" },
-  { id: "postres", name: "Postres" },
-  { id: "bebidas", name: "Bebidas" },
 ];
 
 interface NewDishStep1Props {
@@ -272,11 +266,11 @@ export default function NewDishStep1({
                   name="category"
                   label="Categorías"
                   placeholder="Seleccione"
-                  options={categoryOptions}
+                  options={dishesTags}
                   value={formData.category}
                   onChange={handleChange}
-                  getOptionValue={(option) => option.id}
-                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.value}
+                  getOptionLabel={(option) => option.label}
                   required
                   error={errors.category}
                 />

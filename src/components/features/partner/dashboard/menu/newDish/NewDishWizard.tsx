@@ -7,7 +7,7 @@ import NewDishStep1 from "./NewDishStep1";
 import NewDishStep2 from "./NewDishStep2";
 import PreviewPage from "./PreviewPage";
 
-const actualUrl = "/aliado/dashboard/menu/nuevo";
+const actualUrl = "/aliado/menu/nuevo";
 
 /*const categoryOptions = [
   { id: "entrantes", name: "Entrantes" },
@@ -149,7 +149,7 @@ export default function RegisterWizard() {
       return (
         <NewDishStep1
           onPreview={() => router.push(`${actualUrl}?step=preview`)}
-          onGoBack={() => router.push("/aliado/dashboard/menu")}
+          onGoBack={() => router.push("/aliado/menu")}
           formData={formData}
           requiredFields={requiredFieldsStep1}
           updateFormData={updateFormData}
