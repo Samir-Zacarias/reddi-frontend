@@ -58,25 +58,7 @@ const requiredFieldsStep1: (keyof IDishFormState)[] = [
 export default function RegisterWizard() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const fallbackUrl = "/aliado/dashboard/menu";
   const currentStep = searchParams.get("step");
-
-  const handleGoBackSafely = () => {
-    // document.referrer contiene la URL de la página que enlazó a la actual.
-    // window.location.origin contiene el dominio actual (ej: "https://misitio.com").
-
-    // Comprobamos si hay un referrer y si pertenece al mismo dominio que la app.
-    if (
-      document.referrer &&
-      document.referrer.startsWith(window.location.origin)
-    ) {
-      // Si es seguro, simplemente volvemos atrás.
-      router.back();
-    } else {
-      // Si no es seguro (o no hay referrer), vamos a la URL por defecto.
-      router.push(fallbackUrl);
-    }
-  };
 
   const [formData, setFormData] = useState<IDishFormState>({
     image: null,
@@ -167,7 +149,7 @@ export default function RegisterWizard() {
       return (
         <NewDishStep1
           onPreview={() => router.push(`${actualUrl}?step=preview`)}
-          onGoBack={handleGoBackSafely}
+          onGoBack={() => router.push("/aliado/dashboard/menu")}
           formData={formData}
           requiredFields={requiredFieldsStep1}
           updateFormData={updateFormData}

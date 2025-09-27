@@ -1,16 +1,25 @@
 "use client";
 
+import FooterButtons from "@/src/components/basics/FooterButtons";
 import BasicInput from "@/src/components/basics/BasicInput";
-import Checkbox from "@/src/components/features/partner/CheckBox";
-import FileUploadZone from "@/src/components/features/partner/FileUploadZone";
+import Checkbox from "@/src/components/basics/CheckBox";
+import FileUploadZone from "@/src/components/basics/FileUploadZone";
 import SelectInput from "@/src/components/basics/SelectInput";
 import TextArea from "@/src/components/features/partner/TextArea";
-import ArrowLeftIcon from "@/src/components/icons/ArrowLeftIcon";
-import ArrowRightIcon from "@/src/components/icons/ArrowRightIcon";
 import InputNotice from "@/src/components/basics/InputNotice";
 import { IDishFormState } from "./NewDishWizard";
 import { useState, useRef } from "react";
 import { isFieldInvalid } from "@/src/lib/partner/utils";
+
+const POSITIVE_NUMBER_REGEX = /^(0|[1-9]\d*)(\.\d+)?$/;
+const ESTIMATED_TIME_REGEX = /^\d{1,2}-\d{1,2}?min$/;
+const LIMIT_DESCRIPTION_LENGTH = 250;
+
+const mustBeNumber: (keyof IDishFormState)[] = [
+  "basePrice",
+  "previousPrice",
+  "discount",
+];
 
 const categoryOptions = [
   { id: "entrantes", name: "Entrantes" },
@@ -37,7 +46,7 @@ export default function NewDishStep1({
   onNextStep,
 }: NewDishStep1Props) {
   const [errors, setErrors] = useState<
-    Partial<Record<keyof IDishFormState, boolean>>
+    Partial<Record<keyof IDishFormState, string>>
   >({});
   const formRef = useRef<HTMLFormElement>(null);
   const fileUploadRef = useRef<HTMLDivElement>(null);
@@ -81,20 +90,47 @@ export default function NewDishStep1({
     updateFormData({ [name]: checked });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors: Partial<Record<keyof IDishFormState, boolean>> = {};
-    // Validamos cada campo requerido
+  const verifyErrors = (
+    newErrors: Partial<Record<keyof IDishFormState, string>>
+  ) => {
     requiredFields.forEach((field) => {
       if (isFieldInvalid(formData[field])) {
-        newErrors[field] = true;
+        newErrors[field] = "Este campo es obligatorio";
       }
     });
+    mustBeNumber.forEach((field) => {
+      if (
+        formData[field] &&
+        !POSITIVE_NUMBER_REGEX.test(formData[field] as string)
+      ) {
+        newErrors[field] = "Solo se permiten números positivos";
+      }
+    });
+    if (
+      formData.estimatedTime &&
+      !ESTIMATED_TIME_REGEX.test(formData.estimatedTime)
+    ) {
+      newErrors.estimatedTime = "Siga el formato XX-XXmin, ejemplo: 10-20min";
+    }
+    if (
+      formData.description &&
+      formData.description.length > LIMIT_DESCRIPTION_LENGTH
+    ) {
+      newErrors.description = `La descripción no puede exceder los ${LIMIT_DESCRIPTION_LENGTH} carácteres`;
+    }
+    return newErrors;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    let newErrors: Partial<Record<keyof IDishFormState, string>> = {};
+    newErrors = verifyErrors(newErrors);
 
     // ACTUALIZAMOS el estado de errores si encontramos alguno
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       const firstErrorField = Object.keys(newErrors)[0] as keyof IDishFormState;
+      // Se hace focus al primer campo con error
       if (firstErrorField === "image") {
         fileUploadRef.current?.focus();
       } else {
@@ -112,15 +148,9 @@ export default function NewDishStep1({
     onNextStep();
   };
 
-  const handlePreview = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const newErrors: Partial<Record<keyof IDishFormState, boolean>> = {};
-    // Validamos cada campo requerido
-    requiredFields.forEach((field) => {
-      if (isFieldInvalid(formData[field])) {
-        newErrors[field] = true;
-      }
-    });
+  const handlePreview = () => {
+    let newErrors: Partial<Record<keyof IDishFormState, string>> = {};
+    newErrors = verifyErrors(newErrors);
 
     // ACTUALIZAMOS el estado de errores si encontramos alguno
     if (Object.keys(newErrors).length > 0) {
@@ -134,7 +164,6 @@ export default function NewDishStep1({
         ) as HTMLElement;
         elementToFocus?.focus();
       }
-
       return;
     }
 
@@ -158,7 +187,7 @@ export default function NewDishStep1({
               ref={fileUploadRef}
               required
             />
-            {errors.image && <InputNotice variant="error" />}
+            {errors.image && <InputNotice variant="error" msg={errors.image} />}
           </div>
 
           {/* Columna Derecha: Inputs */}
@@ -190,6 +219,7 @@ export default function NewDishStep1({
                 placeholder="Ingresar la información"
                 value={formData.previousPrice}
                 onChange={handleChange}
+                error={errors.previousPrice}
               />
               <BasicInput
                 id="discount"
@@ -197,6 +227,7 @@ export default function NewDishStep1({
                 placeholder="Ingresar la información"
                 value={formData.discount}
                 onChange={handleChange}
+                error={errors.discount}
               />
             </div>
 
@@ -227,7 +258,7 @@ export default function NewDishStep1({
                 id="description"
                 name="description"
                 label="Descripción"
-                placeholder="Ingresa la información"
+                placeholder={`Ingrese la información, máximo ${LIMIT_DESCRIPTION_LENGTH} carácteres`}
                 value={formData.description}
                 onChange={handleChange}
                 required
@@ -270,39 +301,12 @@ export default function NewDishStep1({
         </div>
 
         {/* Botones de Acción */}
-        <div className="flex items-center justify-between mt-12 border-t pt-6">
-          <button
-            type="button"
-            className="text-sm font-medium text-gray-700 hover:text-gray-900 flex items-center"
-            onClick={onGoBack}
-          >
-            <ArrowLeftIcon />
-            Volver
-          </button>
-
-          <div className="flex flex-col sm:flex-row items-center space-x-3">
-            <button
-              type="button"
-              className="px-5 py-2.5 text-sm font-medium text-white bg-primary rounded-xl hover:bg-green-700 focus:outline-none"
-              onClick={handlePreview}
-            >
-              Vista previa
-            </button>
-            <button
-              type="button"
-              className="px-5 py-2.5 text-sm font-medium text-gray-800 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 focus:outline-none"
-            >
-              Guardar y salir
-            </button>
-            <button
-              type="submit"
-              className="px-5 py-2.5 text-sm font-medium text-white bg-primary rounded-xl hover:bg-green-700 focus:outline-none flex items-center"
-            >
-              Siguiente
-              <ArrowRightIcon fill="#ffffff" />
-            </button>
-          </div>
-        </div>
+        <FooterButtons
+          onGoBack={onGoBack}
+          onPreview={handlePreview}
+          onSaveAndExit={() => {}}
+          onSubmit={handleSubmit}
+        />
       </form>
     </>
   );

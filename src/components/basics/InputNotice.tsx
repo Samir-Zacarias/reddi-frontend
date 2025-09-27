@@ -16,8 +16,10 @@ const variants = {
 
 export default function InputNotice({
   variant,
+  msg,
 }: {
   variant?: "success" | "error";
+  msg?: string;
 }) {
   if (!variant) return null;
 
@@ -33,8 +35,7 @@ export default function InputNotice({
       <span
         className={`text-sm font-medium ${variant && variants[variant].text}`}
       >
-        {variant &&
-          (variant === "success" ? "Dato válido" : "El campo es obligatorio")}
+        {variant && (variant === "success" ? "Dato válido" : msg)}
       </span>
     </div>
   );

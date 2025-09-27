@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import EyeLoginIcon from "@/src/components/icons/EyeLoginIcon";
 import EditPartnerIcon from "@/src/components/icons/EditPartnertIcon";
@@ -28,7 +29,7 @@ export default function UserListItem({ restaurant }: UserListItemProps) {
   return (
     <tr className="border-b border-gray-200 hover:bg-gray-50 font-roboto">
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-        {restaurant.id}
+        #{restaurant.id}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
         <div className="flex items-center">
@@ -62,20 +63,25 @@ export default function UserListItem({ restaurant }: UserListItemProps) {
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <div className="flex items-center space-x-4 text-gray-500">
-          <button
-            type="button"
-            id={`view-${restaurant.id}`}
-            aria-label="Visualizar"
-          >
-            <EyeLoginIcon fill="#6A6C71" />
-          </button>
-          <button
-            type="button"
-            id={`edit-${restaurant.id}`}
-            aria-label="Editar"
-          >
-            <EditPartnerIcon fill="#6A6C71" />
-          </button>
+          <Link href={`/admin/aliados/ver/${restaurant.id}`}>
+            <button
+              type="button"
+              id={`view-${restaurant.id}`}
+              aria-label="Visualizar"
+            >
+              <EyeLoginIcon fill="#6A6C71" />
+            </button>
+          </Link>
+          <Link href={`/admin/aliados/editar/${restaurant.id}`}>
+            <button
+              type="button"
+              id={`edit-${restaurant.id}`}
+              aria-label="Editar"
+            >
+              <EditPartnerIcon fill="#6A6C71" />
+            </button>
+          </Link>
+
           <button
             type="button"
             id={`del-${restaurant.id}`}

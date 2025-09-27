@@ -3,7 +3,7 @@ import InputNotice from "./InputNotice";
 
 type SelectInputProps<T> = {
   id: string;
-  label: string;
+  label?: string;
   options: T[]; // Un array de cualquier tipo de objeto
   getOptionValue: (option: T) => string | number; // Función para obtener el valor del <option>
   getOptionLabel: (option: T) => string; // Función para obtener el texto visible del <option>
@@ -13,7 +13,8 @@ type SelectInputProps<T> = {
   className?: string;
   name?: string;
   required?: boolean;
-  error?: boolean;
+  error?: string;
+  disabled?: boolean;
 };
 
 export default function SelectInput<T>({
@@ -29,6 +30,7 @@ export default function SelectInput<T>({
   name = id,
   required,
   error,
+  disabled = false,
 }: SelectInputProps<T>) {
   return (
     <div className={className}>
@@ -36,7 +38,7 @@ export default function SelectInput<T>({
         htmlFor={id}
         className="block text-sm font-medium text-gray-700 mb-1 font-roboto"
       >
-        {label}
+        {label && label}
         {required && <span className="text-red-500"> *</span>}
       </label>
       <select
@@ -44,6 +46,7 @@ export default function SelectInput<T>({
         name={name || id}
         value={value}
         onChange={onChange}
+        disabled={disabled}
         className={`block w-full rounded-xl border border-[#D9DCE3] sm:text-sm p-2 font-roboto ${
           error && "border-error"
         }`}
@@ -59,7 +62,7 @@ export default function SelectInput<T>({
           );
         })}
       </select>
-      {error && <InputNotice variant="error" />}
+      {error && <InputNotice variant="error" msg={error} />}
     </div>
   );
 }

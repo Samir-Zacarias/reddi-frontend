@@ -11,7 +11,7 @@ type TextAreaInputProps = {
   rows?: number;
   className?: string;
   required?: boolean;
-  error?: boolean;
+  error?: string;
 };
 
 export default function TextAreaInput({
@@ -49,7 +49,7 @@ export default function TextAreaInput({
           }`
         }
       />
-      {error && <InputNotice variant="error" />}
+      {error && <InputNotice variant="error" msg={error} />}
     </>
   );
 }

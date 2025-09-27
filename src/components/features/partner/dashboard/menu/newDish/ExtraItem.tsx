@@ -14,21 +14,22 @@ export default function ExtraItem({ item }: ExtraItemProps) {
 
   return (
     <div className="flex items-center justify-between py-3">
-      <div className="flex items-center gap-3">
-        {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={item.name}
-            width={32}
-            height={32}
-            className="object-contain"
-          />
-        ) : (
-          <div className="w-8 h-8 bg-gray-200 rounded-md flex items-center justify-center">
-            <span className="text-gray-500 text-sm">No Img</span>
-          </div>
-        )}
-        <div>
+      <div className="flex">
+        <div className="flex items-center gap-3 relative w-24 h-8">
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={item.name}
+              fill={true}
+              className="object-fit"
+            />
+          ) : (
+            <div className="w-24 h-8 bg-gray-200 rounded-md flex items-center justify-center">
+              <span className="text-gray-500 text-sm">No Img</span>
+            </div>
+          )}
+        </div>
+        <div className="mx-2">
           <p className="text-sm text-gray-800 font-roboto">{item.name}</p>
           {item.extraPrice && (
             <p className="text-xs text-gray-500">+${item.extraPrice}</p>

@@ -1,13 +1,15 @@
 "use client";
 
+import FooterButtons from "@/src/components/basics/FooterButtons";
 import BasicInput from "@/src/components/basics/BasicInput";
-import Checkbox from "@/src/components/features/partner/CheckBox";
-import ArrowLeftIcon from "@/src/components/icons/ArrowLeftIcon";
-import ArrowRightIcon from "@/src/components/icons/ArrowRightIcon";
+import Checkbox from "@/src/components/basics/CheckBox";
 import { useState } from "react";
 import { dishSection, dishOption } from "./NewDishWizard";
 import DishIcon from "@/src/components/icons/DishIcon";
 import DeletePartnerIcon from "@/src/components/icons/DeletePartnerIcon";
+import FileUploadButton from "@/src/components/basics/FileUploadButton";
+
+const POSITIVE_NUMBER_REGEX = /^(0|[1-9]\d*)(\.\d+)?$/;
 
 interface NewDishStep2Props {
   sections: dishSection[]; // Recibe el array de secciones
@@ -25,28 +27,38 @@ export default function NewDishStep2({
   onPreview,
 }: NewDishStep2Props) {
   const [errors, setErrors] = useState<
-    Partial<Record<keyof dishSection | keyof dishOption, boolean>>
+    Partial<Record<keyof dishSection | keyof dishOption, string>>
   >({});
 
   // Función para verificar errores en secciones y opciones
   const verifyErrors = (
-    newErrors: Partial<Record<keyof dishSection | keyof dishOption, boolean>>
+    newErrors: Partial<Record<keyof dishSection | keyof dishOption, string>>
   ) => {
     // La validación ahora debe ocurrir sobre el array `sections` de las props.
     // Ejemplo de validación:
     sections.forEach((section) => {
       // Se verifica si cada sección tiene un nombre
       if (!section.name.trim()) {
-        newErrors[`sec-name-${section.id}` as keyof dishSection] = true;
+        newErrors[`sec-name-${section.id}` as keyof dishSection] =
+          "Este campo es obligatorio";
       }
       // Se verifica si cada opción dentro de la sección tiene nombre
       section.options.forEach((option) => {
         if (!option.name.trim()) {
-          newErrors[`opt-name-${option.id}` as keyof dishOption] = true;
+          newErrors[`opt-name-${option.id}` as keyof dishOption] =
+            "Este campo es obligatorio";
         }
         // Se verifica si cada opción dentro de la sección tiene precio
         if (!option.extraPrice.trim()) {
-          newErrors[`opt-price-${option.id}` as keyof dishOption] = true;
+          newErrors[`opt-price-${option.id}` as keyof dishOption] =
+            "Este campo es obligatorio";
+        }
+        if (
+          option.extraPrice.trim() !== "" &&
+          !POSITIVE_NUMBER_REGEX.test(option.extraPrice)
+        ) {
+          newErrors[`opt-price-${option.id}` as keyof dishOption] =
+            "Solo se permiten números positivos";
         }
       });
     });
@@ -129,11 +141,29 @@ export default function NewDishStep2({
     onSectionsChange(newSections);
   };
 
+  const handleOptionImageChange = (
+    sectionId: string,
+    optionId: string,
+    file: File | null // El nuevo archivo
+  ) => {
+    const newSections = sections.map((section) => {
+      if (section.id === sectionId) {
+        const updatedOptions = section.options.map((option) =>
+          option.id === optionId ? { ...option, image: file } : option
+        );
+        return { ...section, options: updatedOptions };
+      }
+      return section;
+    });
+    // Notifica al padre del cambio en todo el array de secciones
+    onSectionsChange(newSections);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     let newErrors: Partial<
-      Record<keyof dishSection | keyof dishOption, boolean>
+      Record<keyof dishSection | keyof dishOption, string>
     > = {};
 
     newErrors = verifyErrors(newErrors);
@@ -149,7 +179,7 @@ export default function NewDishStep2({
 
   const handlePreview = () => {
     let newErrors: Partial<
-      Record<keyof dishSection | keyof dishOption, boolean>
+      Record<keyof dishSection | keyof dishOption, string>
     > = {};
 
     newErrors = verifyErrors(newErrors);
@@ -241,12 +271,12 @@ export default function NewDishStep2({
                       key={option.id}
                       className="flex flex-col sm:flex-row items-start sm:items-center gap-3"
                     >
-                      <button
-                        type="button"
-                        className="px-6 py-2.5 text-sm font-medium text-white bg-primary rounded-xl hover:bg-green-700 focus:outline-none flex items-center whitespace-nowrap"
-                      >
-                        Subir imagen
-                      </button>
+                      <FileUploadButton
+                        value={option.image}
+                        onFileChange={(file) =>
+                          handleOptionImageChange(section.id, option.id, file)
+                        }
+                      />
                       <div className="grow">
                         <BasicInput
                           id={`opt-name-${option.id}`}
@@ -313,39 +343,12 @@ export default function NewDishStep2({
         </div>
 
         {/* Botones de Acción */}
-        <div className="flex items-center justify-between mt-12 border-t pt-6">
-          <button
-            type="button"
-            className="text-sm font-medium text-gray-700 hover:text-gray-900 flex items-center"
-            onClick={onGoBack}
-          >
-            <ArrowLeftIcon />
-            Volver
-          </button>
-
-          <div className="flex flex-col sm:flex-row items-center space-x-3">
-            <button
-              type="button"
-              className="px-5 py-2.5 text-sm font-medium text-white bg-primary rounded-xl hover:bg-green-700 focus:outline-none"
-              onClick={handlePreview}
-            >
-              Vista previa
-            </button>
-            <button
-              type="button"
-              className="px-5 py-2.5 text-sm font-medium text-gray-800 bg-white border border-black rounded-xl hover:bg-gray-100 focus:outline-none"
-            >
-              Guardar y salir
-            </button>
-            <button
-              type="submit"
-              className="px-5 py-2.5 text-sm font-medium text-white bg-primary rounded-xl hover:bg-green-700 focus:outline-none flex items-center"
-            >
-              Subir cambios
-              <ArrowRightIcon fill="#ffffff" />
-            </button>
-          </div>
-        </div>
+        <FooterButtons
+          onGoBack={onGoBack}
+          onPreview={handlePreview}
+          onSaveAndExit={() => {}}
+          onSubmit={handleSubmit}
+        />
       </form>
     </>
   );

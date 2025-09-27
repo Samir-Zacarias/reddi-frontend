@@ -11,7 +11,10 @@ type SearchInputProps = {
   name?: string;
   icon?: React.ReactNode;
   required?: boolean;
-  error?: boolean;
+  error?: string;
+  disabled?: boolean;
+  type?: string;
+  autocomplete?: string;
 };
 
 export default function BasicInput({
@@ -25,6 +28,9 @@ export default function BasicInput({
   icon,
   required = false,
   error,
+  disabled = false,
+  type = "text",
+  autocomplete = "off",
 }: SearchInputProps) {
   return (
     <div className={className}>
@@ -42,18 +48,20 @@ export default function BasicInput({
           </div>
         )}
         <input
-          type="text"
+          type={type}
           id={id}
           name={name || id}
           value={value}
           onChange={onChange}
+          disabled={disabled}
           className={`block w-full rounded-xl border-[#D9DCE3] border ${
             icon && "pl-10"
           } sm:text-sm p-2 font-roboto ${error && "border-error"}`}
           placeholder={placeholder}
+          autoComplete={autocomplete}
         />
       </div>
-      {error && <InputNotice variant="error" />}
+      {error && <InputNotice variant="error" msg={error} />}
     </div>
   );
 }

@@ -13,7 +13,7 @@ interface GetPartnersDataParams {
 
 const mockRestaurants: Restaurant[] = [
   {
-    id: "#12345",
+    id: "12345",
     imageUrl: "/ellipse.svg",
     name: "Pizza express",
     nit: "900123456-7",
@@ -23,7 +23,7 @@ const mockRestaurants: Restaurant[] = [
     state: "open",
   },
   {
-    id: "#12346",
+    id: "12346",
     imageUrl: "/ellipse.svg",
     name: "Super Burger",
     nit: "900123456-8",
@@ -33,7 +33,7 @@ const mockRestaurants: Restaurant[] = [
     state: "closed",
   },
   {
-    id: "#12347",
+    id: "12347",
     imageUrl: "/ellipse.svg",
     name: "Café del Sol",
     nit: "900123456-9",
@@ -43,7 +43,7 @@ const mockRestaurants: Restaurant[] = [
     state: "open",
   },
   {
-    id: "#12348",
+    id: "12348",
     imageUrl: "/ellipse.svg",
     name: "Tacos el Jefe",
     nit: "900123457-0",
@@ -53,7 +53,7 @@ const mockRestaurants: Restaurant[] = [
     state: "closed",
   },
   {
-    id: "#12349",
+    id: "12349",
     imageUrl: "/ellipse.svg",
     name: "Sushi Time",
     nit: "900123457-1",
@@ -66,10 +66,9 @@ const mockRestaurants: Restaurant[] = [
 
 const data: RestaurantListProps = {
   restaurants: mockRestaurants,
-  totalCount: mockRestaurants.length,
 };
 
-const apiDelay = 500;
+const apiDelay = 300;
 
 export default async function getPartnersData({
   page = 1,

@@ -10,7 +10,6 @@ export default async function RestaurantListServer({
   searchParams: SearchParams;
 }) {
   const params = await searchParams;
-  console.log(params);
   const page = params.page ? parseInt(params.page as string) : 1;
   const q = params.q || "";
   const type = params.type || "";
@@ -27,10 +26,5 @@ export default async function RestaurantListServer({
     orderBy: orderBy as string,
     order: order as string,
   });
-  return (
-    <RestaurantList
-      restaurants={data.restaurants}
-      totalCount={data.totalCount}
-    />
-  );
+  return <RestaurantList restaurants={data.restaurants} />;
 }

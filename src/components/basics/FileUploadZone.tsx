@@ -6,6 +6,7 @@ import { forwardRef, useState, useEffect, ChangeEvent, DragEvent } from "react";
 interface FileUploadZoneProps {
   required?: boolean;
   onFileChange: (file: File | null) => void;
+  label?: string;
   value?: File | null;
 }
 
@@ -13,7 +14,10 @@ const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 export default forwardRef<HTMLDivElement, FileUploadZoneProps>(
-  function FileUploadZone({ required, onFileChange, value }, ref) {
+  function FileUploadZone(
+    { required, onFileChange, value, label = "Foto del producto" },
+    ref
+  ) {
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -115,7 +119,7 @@ export default forwardRef<HTMLDivElement, FileUploadZoneProps>(
           className="block text-sm font-medium text-gray-700 mb-1 font-roboto"
           htmlFor="file-upload-input"
         >
-          Foto del producto
+          {label}
           {required && <span className="text-red-500"> *</span>}
         </label>
 
